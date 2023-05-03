@@ -5,10 +5,10 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import thkoeln.divekithelper.common.DivekitHelper;
 
+
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * by using Reflection.
  */
 public class DivekitHelperCode extends DivekitHelper {
-
 
     private String pathToPackage;
 

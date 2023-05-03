@@ -26,7 +26,7 @@ Der Helper enthält jedoch nur eine Implementierung der Code-Testklasse und ist 
 ## Test-Methoden Erklärung
 
 Die Syntax der DSL basiert auf der Method-Chaining Methode.
-Im Folgenden werden die einzelnen Methoden bezüglich ihrer Funktionalität und Bedienung in der "Chain" beschrieben.
+Im Folgenden werden die einzelnen Methoden bezüglich ihrer Funktionalität und Bedienung beschrieben.
 
 ### Tabellentests
 
@@ -42,20 +42,20 @@ Im Folgenden werden die einzelnen Methoden bezüglich ihrer Funktionalität und 
 
 
 ***column( SPALTENNAME oder SPALTENNUMMER )***
-- **Funktionalität:** Spezifiziere eine Spalte, auf welcher tests ausgeführt werden.
+- **Funktionalität:** Spezifiziert eine Spalte, auf welcher Tests ausgeführt werden.
 - **Parameter:** Spaltenname = Name der Spalte. / Spaltennummer = Nummer der Spalte, beginnend bei null.
 
 ***rowMismatch()***
-- **Funktionalität:** Teste, ob alle Elemente, welche in derselben Zeile in der Lösung stehen, auch in derselben Zeile in der Nutzer-Tabelle stehen, hierbei ist die Rheinfolge der Zeilen egal.
+- **Funktionalität:** Testet, ob alle Elemente, welche in derselben Zeile in der Lösung stehen, auch in derselben Zeile in der Nutzer-Tabelle stehen, hierbei ist die Rheinfolge der Zeilen egal.
 Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte enthält.
 - **Platzhalter:** `_ELEMENT_`= Hiermit lassen sich falsche Elemente ausgeben.
 
 ***missing()***
-- **Funktionalität:** Tests, ob ein Element in der angegebenen Spalte fehlt.
+- **Funktionalität:** Testet, ob ein Element in der angegebenen Spalte fehlt.
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich fehlende Elemente ausgeben./ `_COLUMN1_` = Hiermit wird der Name der betroffenen Spalte ausgegeben.
 
 ***tooMany()***
-- **Funktionalität:** Testet, ob ein element in der angegebenen Spalte überflüssig ist
+- **Funktionalität:** Testet, ob ein Element in der angegebenen Spalte überflüssig ist
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich überflüssige Elemente ausgeben./ `_COLUMN1_` = Hiermit wird der Name der betroffenen Spalte ausgegeben.
 
 ***capitalisation()***
@@ -68,17 +68,17 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich Elemente ausgeben, welche in der falschen Spalte stehen. `_COLUMN1_` = Der Name der Spalte, in welche die Elemente gehören. / `_COLUMN2_` = Der Name der Spalte, in welcher die Elemente stehen.
 
 ***or()***
-- **Funktionalität:** Verknüpfe mehrere Tests derselben Art.
+- **Funktionalität:** Verknüpft mehrere Tests derselben Art.
 
 ***message( TESTLEVEL, NACHRICHT )***
-- **Funktionalität:** Definiere eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
+- **Funktionalität:** Definiert eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
 - **Parameter:** Test-Level = Das Level, welches erreicht werden muss, damit diese Nachricht ausgegeben wird (das geringste Level is 1)./ Nachricht = Wird ausgeben, wenn der Test fehlschlägt und das Test-Level erreicht ist. Kann Platzhalter enthalten, welche bei bestimmten Tests durch andere Elemente ersetzt werden. 
 
 ***combine()***
-- **Funktionalität:** Kombiniere mehrere Tests unter einem Testnamen.
+- **Funktionalität:** Kombiniert mehrere unterschiedliche Tests unter einem Testnamen.
 
 ***test( TESTNAME, TESTKATEGORIENAME )***
-- **Funktionalität:** Führe den Test durch und generiere das Ergebnis.
+- **Funktionalität:** Führt den Test durch und generiert das Ergebnis.
 - **Parameter:** Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
 
@@ -89,34 +89,34 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - **Parameter:** Klassendiagramm-Test-Klasse =  Eine Klasse, welche das [ClassDiagram-Test-Interface](src/main/java/thkoeln/divekithelper/classDiagram/ClassDiagramTestInterface.java) implementiert.
 
 ***missingClasses()***
-- **Funktionalität:** Teste, ob eine Klasse im Diagramm fehlt.
+- **Funktionalität:** Testet, ob eine Klasse im Diagramm fehlt.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche im Diagramm fehlen.
 
 ***missingRelations()***
-- **Funktionalität:** Teste, ob eine Relation im Diagramm fehlt.
+- **Funktionalität:** Testet, ob eine Relation im Diagramm fehlt.
 - **Platzhalter:** `_RELATION_` = Hiermit lassen sich die Relationen ausgeben, welche im Diagramm fehlen.
 
 ***mismatch()***
-- **Funktionalität:** Teste, ob es einen Unterschied zwischen dem Glossar und dem Diagramm gibt.
+- **Funktionalität:** Testet, ob es einen Unterschied zwischen dem Glossar und dem Diagramm gibt.
 - **Platzhalter:** `_MISMATCH_` = Hiermit lassen sich die Unterschiede zwischen dem Diagramm und Glossar ausgeben.
 
 ***wrongRelations()***
-- **Funktionalität:** Teste, ob eine im Diagramm bestehende Relation überflüssig ist.
+- **Funktionalität:** Testet, ob eine im Diagramm bestehende Relation überflüssig ist.
 - **Platzhalter:** `_RELATION_` = Hiermit lassen sich die Relationen ausgeben, welche im Diagramm überflüssig sind.
 
 ***illegalElementes()***
-- **Funktionalität:** Teste, ob ein Zeichen im Diagramm verwendet wird, welches von UMLet nicht erkannt wird.
+- **Funktionalität:** Testet, ob ein Zeichen im Diagramm verwendet wird, welches von UMLet nicht erkannt wird.
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich die Elemente ausgeben, welche im Diagramm vorhanden sind, aber von UMLet nicht erkannt werden.
 
 ***message( TESTLEVEL, NACHRICHT )***
-- **Funktionalität:** Definiere eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
+- **Funktionalität:** Definiert eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
 - **Parameter:** Test-Level = Das Level, welches erreicht werden muss, damit diese Nachricht ausgegeben wird (das geringste Level is 1)./ Nachricht = Wird ausgeben, wenn der Test fehlschlägt und das Test-Level erreicht ist. Kann Platzhalter enthalten, welche bei bestimmten Tests durch andere Elemente ersetzt werden.
 
 ***combine()***
-- **Funktionalität:** Kombiniere mehrere Tests unter einem Testnamen.
+- **Funktionalität:** Kombiniert mehrere Tests unter einem Testnamen.
 
 ***test( TESTNAME, TESTKATEGORIENAME )***
-- **Funktionalität:** Führe den Test durch und generiere das Ergebnis.
+- **Funktionalität:** Führt den Test durch und generiere das Ergebnis.
 - **Parameter:** Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
 
@@ -126,27 +126,27 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 
 ***classes( PAKETPFAD )***
 - **Funktionalität:** Beginn eines Code-Tests.
-- **Parameter:** Paketpfad = Der Pfad zum Packet, welches alle Klassen enthält, die getestet werden sollen.
+- **Parameter:** Paketpfad = Der Pfad zum Paket, welches alle Klassen enthält, die getestet werden sollen.
 
 ***withName( KLASSENNAME )***
-- **Funktionalität:** Teste alle klassen, mit einem bestimmten Namen.
+- **Funktionalität:** Teste alle Klassen, mit einem bestimmten Namen.
 - **Parameter:** Klassenname = Name der Klasse die getestet werden soll.
 
 ***withAnnotation( ANNOTATION )***
-- **Funktionalität:** Teste alle klassen, mit einer bestimmten Annotation.
+- **Funktionalität:** Teste alle Klassen, mit einer bestimmten Annotation.
 - **Parameter:** Annotation = Annotation der Klassen, die getestet werden sollen.
 
 ***immutable()***
-- **Funktionalität:** Teste, ob die Klassen unveränderbar sind (unveränderbar heißt, dass es keine public Variablen und setter Methoden gibt).
+- **Funktionalität:** Testet, ob die Klassen unveränderbar sind (unveränderbar heißt, dass es keine public Variablen und setter Methoden gibt).
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche veränderbar sind.
 
 ***inPackage( PAKETSTRUKTUR )***
-- **Funktionalität:** Teste, ob die Klassen in einem Bestimmten Packet sind.
-- **Parameter:**  Paketstruktur = Gebe das Ende der Paketstruktur an, in welcher die Klassen liegen sollen. Dies Kann auch nur das letzte Packet sein.
-- **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche nicht im richtigen sind.
+- **Funktionalität:** Testet, ob die Klassen in einem bestimmten Paket sind.
+- **Parameter:**  Paketstruktur = Gebe das Ende der Paketstruktur an, in welcher die Klassen liegen sollen. Dies kann auch nur das innerste Paket sein.
+- **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche nicht im richtigen Paket sind.
 
 ***noCircularDependencies()***
-- **Funktionalität:** Teste, ob die Klassen zirkulären Abhängigkeiten haben.
+- **Funktionalität:** Testet, ob die Klassen zirkulären Abhängigkeiten haben.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche zirkuläre Abhängigkeiten haben.
 
 ***shouldHave()***
@@ -156,25 +156,25 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - **Funktionalität:** Die Klassen sollten das folgende nicht Attribut haben.
 
 ***annotation( ANNOTATION )***
-- **Funktionalität:** Teste, ob die Klassen die Annotation besitzen.
+- **Funktionalität:** Testet, ob die Klassen die Annotation besitzen.
 - **Parameter:** Annotation = Die Annotation, welche die Klassen haben oder nicht haben sollen.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche die Annotation entsprechend der festgelegten Regel besitzen oder nicht besitzen.
 
 ***otherClass( KLASSENNAME )***
-- **Funktionalität:** Teste, ob es für jede Klasse eine andere Klasse mit einem bestimmten Namen gibt.
+- **Funktionalität:** Testet, ob es für jede Klasse eine andere Klasse mit einem bestimmten Namen gibt.
 - **Parameter:** Klassenname = Name einer dritten Klasse, welche alle getesteten Klassen besitzen müssen. Im Namen der dritten Klasse kann `_CLASS_` verwendet werden, um den Namen der zu testenden Klassen einzufügen.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche eine andere Klasse entsprechend der festgelegten Regel besitzen oder nicht besitzen.
 
 ***stacktrace()***
-- **Funktionalität:** Teste, ob der Error Stacktrace eines Surefire-Reports eine Klasse des angegebenen Packets enthält.
+- **Funktionalität:** Testet, ob der Error Stacktrace eines Surefire-Reports eine Klasse des angegebenen Pakets enthält.
 - **Platzhalter:** `_LINE_` = Hiermit lassen sich die Zeilen ausgeben, in welcher eine lokale Klasse das erste Mal auftaucht./ `_TEST_` = Hiermit lassen sich die der Name des Tests ausgeben, der dem gefundenen Stacktrace zugeordnet ist.
 
 ***message( TESTLEVEL, NACHRICHT )***
-- **Funktionalität:** Definiere eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
+- **Funktionalität:** Definiert eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.
 - **Parameter:** Test-Level = Das Level, welches erreicht werden muss, damit diese Nachricht ausgegeben wird (das geringste Level is 1)./ Nachricht = Wird ausgeben, wenn der Test fehlschlägt und das Test-Level erreicht ist. Kann Platzhalter enthalten, welche bei bestimmten Tests durch andere Elemente ersetzt werden.
 
 ***test( TESTNAME, TESTKATEGORIENAME )***
-- *Funktionalität:* Führe den Test durch und generiere das Ergebnis.
+- *Funktionalität:* Führt den Test durch und generiere das Ergebnis.
 - *Parameter:* Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
 ### Beispiele
@@ -192,7 +192,7 @@ Für einen Überblick über die Einsatzmöglichkeiten der DSL gibt es Beispiele 
 ## Divekit-Helper Aufbau
 
 
-Insgesamt umfasst der Divekit Helper einen allgemeinen und drei spezialisierte Teile.
+Insgesamt umfasst der Divekit-Helper einen allgemeinen und drei spezialisierte Teile.
 Die drei Spezialisierungen bestehen aus den verfügbaren Testarten: Tabelle, Klassendiagramm und Code.
 
 Der [common](src/main/java/thkoeln/divekithelper/common)-Ordner enthält die allgemeinen Klassen.
@@ -221,7 +221,7 @@ Hierfür stellt er folgende Dateien zur verfügung:
 
 Der Helper besitzt noch nicht alle Funktionen um vollständig eingesetzt werden zu können.
 Die folgenden Funktionen sind bereits fertig:
-- Die DSL (nur die Syntax)
+- Die DSL (die Syntax)
 - Der Code-Test
 - Das Generieren von Ergebnissen
 
@@ -231,11 +231,14 @@ Während andere Funktionen noch eine Implementierung von Interfaces benötigen:
 
 Beim Erstellen der Tabellen-Test-Klasse sollte die momentane Benutzung der Tabellen berücksichtigt werden, so gibt es z.B. Spalten welche einen Platzhalter ("...") besitzen und von Studenten beliebig ausgefüllt werden dürfen oder mehrere Begriffe in einer Zelle, welche in beliebiger Reihenfolge stehen dürfen.
 
-Die momentane Beispiel-Commit-Frequency-Klasse arbeitet mit einer lokalen Datei, welche bei jedem Push auf das Repo in der Pipeline verändert wird. Diese Implementierung dient nur demonstrationszwecken und berücksichtigt nicht die veränderten Dateien, sondern erhöht das Level bei jedem Aufruf eines Tests.
-Bei einer richtigen Implementierung sollten die veränderten Dateien jedoch eine Rolle spielen. Außerdem sollte das Speichern der Level nicht über ein Push aus der Pipeline funktionieren, sondern beispielsweise über Caching oder einen Server auf den der Gitlab-Runner zugriff hat.
+Die momentane Beispiel-Commit-Frequency-Klasse arbeitet mit einer lokalen Datei, welche bei jedem Push auf das Repo in der Pipeline verändert wird. Diese Implementierung dient nur demonstrationszwecken und berücksichtigt nicht, welche Aufgaben bearbeitet wurden, sondern erhöht das Level eines Tests bei jedem Aufruf.
+Bei einer richtigen Implementierung sollten die bearbeiteten Aufgaben jedoch eine Rolle spielen. Außerdem sollte das Speichern der Level nicht über ein Push aus der Pipeline funktionieren, sondern beispielsweise über Caching oder einen Server auf den der Gitlab-Runner zugriff hat.
 
 ### Integration
-Zuerst sollte man aus dem Divekit-Helper Jar builden und sie dem Projekt hinzufügen.
+Zuerst sollte man aus dem Divekit-Helper eine Jar builden und sie dem Projekt hinzufügen.
+Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen.
+
+Dann kann man diese Jar als Dependency installieren.
 Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werden, da der Surefire-Test vom Helper genutzt wird.
 ```
     - mvn install:install-file -Dfile=divekit-helper.jar -DgroupId=thkoeln -DartifactId=divekit-helper -Dversion=1.0 -Dpackaging=jar # install Divekit-Helper
@@ -257,6 +260,7 @@ Außerdem muss der Divekit-Helper als Dependency der `pom.xml` hinzugefügt werd
 ```
 
 Folgende Befehle sollten im Build teil der `pom.xml` stehen, damit die Stacktraces erhalten bleiben und der Helper ausgeführt wird:
+
 Stacktrace
 ```			
     <plugin>
@@ -293,4 +297,3 @@ Da diese Version jedoch mit einem Push arbeitet, benötigt sie einen Project Acc
     - git push project HEAD:master -o ci.skip #ci.skip => prevents trigger of pipeline script
 ```
 
-Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen.
