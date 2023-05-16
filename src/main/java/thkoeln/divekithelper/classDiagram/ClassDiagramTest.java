@@ -42,7 +42,7 @@ public class ClassDiagramTest{
         missingClasses.removeAll( umletHelper.getUserClasses() );
 
 
-        return missingClasses.stream().map( Object::toString ).toList();
+        return missingClasses.stream().map( Object::toString ).collect(Collectors.toList());
     }
 
     /**
@@ -54,7 +54,7 @@ public class ClassDiagramTest{
         wrongClasses.removeAll( umletHelper.getSolutionClasses() );
 
 
-        return wrongClasses.stream().map( Object::toString ).toList();
+        return wrongClasses.stream().map( Object::toString ).collect(Collectors.toList());
     }
 
     /**
@@ -142,7 +142,7 @@ public class ClassDiagramTest{
         }
 
         glossaryClassNames = List.of( Arrays.stream(glossaryTable.getContent()).map(row -> row[columnNumber]).toArray(String[]::new) );
-        glossaryClassNames = glossaryClassNames.stream().map(String::toLowerCase).toList();
+        glossaryClassNames = glossaryClassNames.stream().map(String::toLowerCase).collect(Collectors.toList());
     }
 
 
@@ -153,7 +153,7 @@ public class ClassDiagramTest{
     public List<String> getMismatch() {
         List<String> mismatches = new ArrayList<>();
 
-        List<String> classNames = umletHelper.getUserClasses().stream().map( Object::toString ).map( String::toLowerCase ).toList();
+        List<String> classNames = umletHelper.getUserClasses().stream().map( Object::toString ).map( String::toLowerCase ).collect(Collectors.toList());
 
         List<String> glossaryMismatches = new ArrayList<>( glossaryClassNames );
         glossaryMismatches.removeAll( classNames );
@@ -257,7 +257,7 @@ public class ClassDiagramTest{
      * @param second second list
      * @return true if they are equal
      */
-    private boolean areListsEqual( List first, List second ){
+    private boolean areListsEqual( List<String> first, List<String> second ){
         return first.size() == second.size() && first.containsAll( second ) && second.containsAll( first );
     }
 
