@@ -292,7 +292,7 @@ public class DivekitHelperTable extends DivekitHelper {
         if( !tableTest.isTestValid() ){
             setTestName( testName );
             setTestCategory( testCategory );
-            postResult("The table is wrongly formatted or has the wrong number of columns.", false);
+            postResult("Cannot read the table. It does not exist, is wrongly formatted or has the wrong number of columns.", false);
             return false;
         }
 
