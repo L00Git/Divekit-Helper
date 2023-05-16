@@ -38,7 +38,7 @@ public class DivekitHelperCode extends DivekitHelper {
     @Setter
     private ConditionType condition = ConditionType.NONE;
 
-    public enum TestType { NONE, ANNOTATION, OTHER_CLASS, DIRECTORY, IMMUTABLE , STACKTRACE, CIRCULARDEPENDENCY}
+    public enum TestType { NONE, ANNOTATION, OTHER_CLASS, DIRECTORY, IMMUTABLE , STACKTRACE, CIRCULAR_DEPENDENCY}
 
     @Setter
     private TestType test = TestType.NONE;
@@ -105,7 +105,7 @@ public class DivekitHelperCode extends DivekitHelper {
                 return testImmutable(message);
             case STACKTRACE:
                 return testAllStackTrace(message);
-            case CIRCULARDEPENDENCY:
+            case CIRCULAR_DEPENDENCY:
                 return testCircularDependency(message);
             default:
                 throw new IllegalArgumentException();

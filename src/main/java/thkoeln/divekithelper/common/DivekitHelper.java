@@ -3,6 +3,7 @@ package thkoeln.divekithelper.common;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import thkoeln.divekithelper.code.SureFireHelper;
 import thkoeln.divekithelper.mock.implementations.MockCommitFrequency;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public class DivekitHelper {
     private HashMap<Integer, String> messages = new HashMap<>();
 
 
-    protected XMLHelper xmlHelper = new XMLHelper();
+    protected SureFireHelper xmlHelper = new SureFireHelper();
 
     private JSONHelper jsonHelper = new JSONHelper();
 

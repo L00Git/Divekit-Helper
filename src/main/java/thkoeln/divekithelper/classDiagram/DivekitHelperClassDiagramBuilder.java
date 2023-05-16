@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagramBuilderPostClassDiagram,
                                                          DivekitHelperClassDiagramBuilderPostMissingClasses,
+                                                         DivekitHelperClassDiagramBuilderPostWrongClasses,
+                                                         DivekitHelperClassDiagramBuilderPostClassWrongAttributes,
                                                          DivekitHelperClassDiagramBuilderPostMissingRelations,
                                                          DivekitHelperClassDiagramBuilderPostMismatch,
                                                          DivekitHelperClassDiagramBuilderPostIllegalElements,
@@ -21,13 +23,13 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
     private List<DivekitHelperClassDiagram> classDiagramTests = new ArrayList<>();
 
 
-    private ClassDiagramTestInterface classDiagramTest;
+    private ClassDiagramTest classDiagramTest;
 
     /**
      * Initiate the Builder and set the ClassDiagramTest
-     * @param classDiagramTest a ClassDiagramTest that implements the ClassDiagramTestInterface
+     * @param classDiagramTest a ClassDiagramTest
      */
-    public DivekitHelperClassDiagramBuilder( ClassDiagramTestInterface classDiagramTest ){
+    public DivekitHelperClassDiagramBuilder( ClassDiagramTest classDiagramTest ){
         this.classDiagramTest = classDiagramTest;
     }
 
@@ -36,7 +38,7 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
      * @param classDiagramTest a ClassDiagramTest that implements the ClassDiagramTestInterface
      * @return a new Builder object
      */
-    public static DivekitHelperClassDiagramBuilderPostClassDiagram classDiagram( ClassDiagramTestInterface classDiagramTest ){
+    public static DivekitHelperClassDiagramBuilderPostClassDiagram classDiagram( ClassDiagramTest classDiagramTest ){
         return new DivekitHelperClassDiagramBuilder ( classDiagramTest );
     }
 
@@ -46,7 +48,27 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
      */
     public DivekitHelperClassDiagramBuilder missingClasses(){
         classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
-        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.MISSINGCLASS );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.MISSING_CLASS);
+        return this;
+    }
+
+    /**
+     * Start a wrong classes test, by creating a new DivekitHelperClassDiagram object and setting its test type.
+     * @return this Builder object
+     */
+    public DivekitHelperClassDiagramBuilder wrongClasses(){
+        classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.WRONG_CLASS);
+        return this;
+    }
+
+    /**
+     * Start a class has wrong attributes test, by creating a new DivekitHelperClassDiagram object and setting its test type.
+     * @return this Builder object
+     */
+    public DivekitHelperClassDiagramBuilder classWrongAttributes(){
+        classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.CLASS_WRONG_ATTRIBUTES);
         return this;
     }
 
@@ -56,17 +78,18 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
      */
     public DivekitHelperClassDiagramBuilder missingRelations(){
         classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
-        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.MISSINGRELATION );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.MISSING_RELATION);
         return this;
     }
 
     /**
-     * Start a mismatch test, by creating a new DivekitHelperClassDiagram object and setting its test type.
+     * Start a mismatch test, by creating a new DivekitHelperClassDiagram object and setting its test type and glossary information.
      * @return this Builder object
      */
-    public DivekitHelperClassDiagramBuilder mismatch(){
+    public DivekitHelperClassDiagramBuilder mismatch( String glossaryPath, String columnOfClassNames ){
         classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
         getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.MISMATCH );
+        getCurrentClassDiagramTest().setGlossary( glossaryPath, columnOfClassNames );
         return this;
     }
 
@@ -76,7 +99,7 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
      */
     public DivekitHelperClassDiagramBuilder wrongRelations(){
         classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
-        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.WRONGRELATION );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.WRONG_RELATION);
         return this;
     }
 
@@ -86,7 +109,7 @@ public class DivekitHelperClassDiagramBuilder implements DivekitHelperClassDiagr
      */
     public DivekitHelperClassDiagramBuilder illegalElements(){
         classDiagramTests.add( new DivekitHelperClassDiagram( classDiagramTest ) );
-        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.ILLEGALELEMENTS );
+        getCurrentClassDiagramTest().setTest( DivekitHelperClassDiagram.TestType.ILLEGAL_ELEMENTS);
         return this;
     }
 

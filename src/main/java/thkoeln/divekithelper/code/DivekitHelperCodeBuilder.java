@@ -80,7 +80,7 @@ public class DivekitHelperCodeBuilder implements DivekitHelperCodeBuilderPostCla
      * @return this Builder object
      */
     public DivekitHelperCodeBuilder noCircularDependencies(){
-        codeTest.setTest( DivekitHelperCode.TestType.CIRCULARDEPENDENCY);
+        codeTest.setTest( DivekitHelperCode.TestType.CIRCULAR_DEPENDENCY);
         return this;
     }
 

@@ -8,12 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class implements the tests associated with Tables,
- * by making calls to the TableTest-Class and generating the corresponding output.
+ * This class creates test-calls to the TableTest-Class and generating the corresponding output.
  */
 public class DivekitHelperTable extends DivekitHelper {
 
-    private TableTestInterface tableTest;
+    private TableTest tableTest;
 
     @Getter
     private Map<Integer, String> rowComments = new HashMap<>();
@@ -28,7 +27,7 @@ public class DivekitHelperTable extends DivekitHelper {
     private String columnName1 = "";
     private String columnName2 = "";
 
-    public enum TestType { NONE, MISSING, TOOMANY, WRONGCOLUMN, ROWMISMATCH, ROWCOLUMNMISMATCH, CAPITALISATION}
+    public enum TestType { NONE, MISSING, TOO_MANY, WRONG_COLUMN, ROW_MISMATCH, ROW_COLUMN_MISMATCH, CAPITALISATION}
 
     @Setter
     private TestType test = TestType.NONE;
@@ -38,7 +37,7 @@ public class DivekitHelperTable extends DivekitHelper {
      * Initialize the class.
      * @param tableTest a TableTest-Class that implements the TabelTestInterface
      */
-    public DivekitHelperTable( TableTestInterface tableTest ) {
+    public DivekitHelperTable( TableTest tableTest ) {
         this.tableTest = tableTest;
     }
 
@@ -47,7 +46,7 @@ public class DivekitHelperTable extends DivekitHelper {
      * @param columnName the column name
      */
     public void setColumn( String columnName ){
-        if( !tableTest.isTableValid() )
+        if( !tableTest.isTestValid() )
             return;
 
         columnName1 = columnName;
@@ -59,7 +58,7 @@ public class DivekitHelperTable extends DivekitHelper {
      * @param columnNumber the column number (0 being the first column)
      */
     public void setColumn( int columnNumber ){
-        if( !tableTest.isTableValid() )
+        if( !tableTest.isTestValid() )
             return;
 
         columnName1 = tableTest.getColumnNames()[columnNumber];
@@ -72,7 +71,7 @@ public class DivekitHelperTable extends DivekitHelper {
      * @param columnName2 the name of the second column
      */
     public void setColumn( String columnName1, String columnName2 ){
-        if( !tableTest.isTableValid() )
+        if( !tableTest.isTestValid() )
             return;
 
         this.columnName1 = columnName1;
@@ -87,7 +86,7 @@ public class DivekitHelperTable extends DivekitHelper {
      * @param columnNumber2 the number of the second column
      */
     public void setColumn( int columnNumber1, int columnNumber2 ){
-        if( !tableTest.isTableValid() )
+        if( !tableTest.isTestValid() )
             return;
 
 
@@ -112,17 +111,17 @@ public class DivekitHelperTable extends DivekitHelper {
         switch (test) {
             case NONE:
                 return false;
-            case ROWCOLUMNMISMATCH:
+            case ROW_COLUMN_MISMATCH:
                 return testRowColumnMismatch( message );
-            case ROWMISMATCH:
+            case ROW_MISMATCH:
                 return testRowMismatch( message );
             case CAPITALISATION:
                 return testCapitalisation( message );
             case MISSING:
                 return testMissing( message );
-            case TOOMANY:
+            case TOO_MANY:
                 return testTooMany( message );
-            case WRONGCOLUMN:
+            case WRONG_COLUMN:
                 return testWrongColumn( message );
             default:
                 throw new IllegalArgumentException();
@@ -138,7 +137,7 @@ public class DivekitHelperTable extends DivekitHelper {
 
         List<int[]> mismatches = tableTest.getRowColumnMismatches();
 
-        for( int row = 0; row < tableTest.getTable().length; row ++ ){
+        for( int row = 0; row < tableTest.getUserTable().getContent().length; row ++ ){
             List<String> mismatchElementsInRow = tableTest.getRowColumnMismatchElementsInRow( row );
             if(mismatchElementsInRow.size() > 0)
                 rowComments.put( row, replaceMessageElement( message, mismatchElementsInRow, mismatches ) );
@@ -156,7 +155,7 @@ public class DivekitHelperTable extends DivekitHelper {
     private boolean testRowMismatch( String message ){
         List<int[]> mismatches = tableTest.getRowMismatches( column1 );
 
-        for( int row = 0; row < tableTest.getTable().length; row ++ ){
+        for( int row = 0; row < tableTest.getUserTable().getContent().length; row ++ ){
             List<String> mismatchElementsInRow = tableTest.getRowMismatchesInRow( column1, row );
             if(mismatchElementsInRow.size() > 0)
                 rowComments.put( row, replaceMessageElement( message, mismatchElementsInRow, mismatches ) );
@@ -290,10 +289,10 @@ public class DivekitHelperTable extends DivekitHelper {
      */
     public boolean combineResults( List< DivekitHelperTable > divekitHelperTableTests, String testName, String testCategory ){
 
-        if( !tableTest.isTableValid() ){
+        if( !tableTest.isTestValid() ){
             setTestName( testName );
             setTestCategory( testCategory );
-            postResult("The table is invalid.", false);
+            postResult("The table is wrongly formatted or has the wrong number of columns.", false);
             return false;
         }
 
@@ -356,7 +355,7 @@ public class DivekitHelperTable extends DivekitHelper {
      */
     private String createTable( Map<Integer, String> rowComments,  Map<Integer, String> columnComments) {
 
-        String[][] table = tableTest.getTable();
+        String[][] table = tableTest.getUserTable().getContent();
         String[] columnNames = tableTest.getColumnNames();
 
         StringBuilder sb = new StringBuilder();

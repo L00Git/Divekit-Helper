@@ -1,39 +1,75 @@
-## Inhaltsverzeichnis
+# Inhaltsverzeichnis
 
 - [Funktionalität des Divekit-Helpers](#funktionalität-des-divekit-helpers)
-- [Divekit-Helper Aufbau](#divekit-helper-aufbau)
-- [Test-Methoden Erklärung](#test-methoden-erklärung)
-  - [Tabellentests](#tabellentests)
-  - [Klassendiagrammtest](#klassendiagrammtests)
-  - [Codetests](#codetests)
+- [Test Erklärung](#test-erklärung)
+  - [Tabellentests](#tabellentest)
+  - [Klassendiagrammtest](#klassendiagrammtest)
+  - [Codetests](#codetest)
   - [Beispiele](#beispiele)
+- [Divekit-Helper Aufbau](#divekit-helper-aufbau)
 - [Implementations-Hinweise](#implementations-hinweise)
   - [Aktueller Stand & notwendige Implementierungen](#aktueller-stand--notwendige-implementierungen)
   - [Integration](#integration)
 
 ---
 
-## Funktionalität des Divekit-Helpers
+# Funktionalität des Divekit-Helpers
 
 Die Hauptfunktion des Helpers ist es das Erstellen von Tests durch eine DSL zu vereinfachen.
 Dies geschieht durch das Übersetzen der DSL in interne Aufrufe der entsprechenden Tests.
+
 Diese Tests generieren eine mit dem Divekit-Report-Visualizer kompatible Datei. 
+
 Der Helper deckt drei Kategorien von Tests ab: Tabellen-Tests, Klassendiagramm-Tests und Code-Tests.
-Der Helper enthält jedoch nur eine Implementierung der Code-Testklasse und ist momentan auf externe Implementieren der Tabellen- und Klassendiagramm-Tests angewiesen.
+
+Außerdem wird das Erstellen mehrerer Test-Level ermöglicht, welches z.B. nach Problemen mit der Lösung einer Aufgabe erhöht werden kann.
+Durch dieses Test-Level kann unterschiedliches Feedback für einen Fehler erstellt werden, welches erst mit einem erhöhten Test-Level ausgegeben wird.
 
 ---
 
-## Test-Methoden Erklärung
+# Test Erklärung
 
-Die Syntax der DSL basiert auf der Method-Chaining Methode.
-Im Folgenden werden die einzelnen Methoden bezüglich ihrer Funktionalität und Bedienung beschrieben.
+## Tabellentest
 
-### Tabellentests
+### Testart
 
+Im Tabellentest werden Markdown-Dateien eingelesen. Diese müssen dem folgenden Format entsprechen:
+
+```
+| Spaltenname 1     | Spaltenname 2    |
+|-------------------|------------------|
+| Tabelleninhalt 1  | Tabelleninhalt A |
+| Tabelleninhalt 2  | Tabelleninhalt B |
+| Tabelleninhalt 3  | Tabelleninhalt C |
+```
+
+Man gibt dem Test zwei Dateien an, die Tabelle der Studenten und die Lösungs-Tabelle.
+
+Im Tabellentest lassen sich Spalten über ihren Spaltennamen oder ihre Nummer (bei 0 beginnend) ansprechen.
+In der Ausgabe lässt sich der durch den Test betroffene Tabelleninhalt durch `_ELEMENT_` ausgeben, sofern dies vom ausgeführten Test unterstützt wird.
+Auf die gleiche Weise lassen sich die Spaltennamen mittels `_COLUMN1_` oder `_COLUMN2_` in den davon unterstützten Tests ausgeben.
+
+
+Der Tabelleninhalt kann auch aus einer Liste bestehen. Diese wird mittels `,` getrennt, die Reihenfolge ist hierbei egal. 
+So kann in der Lösung "Tabelleninhalt A" z.B. "Apfel, Birne" sein, dann wäre es auch richtig, wenn ein Student "Birne, Apfel" schreibt.
+
+Wenn in der Lösungs-Tabelle in einer Spalte der Tabelleninhalt `...` steht, gibt dies an, dass die Spalte von Studenten mit jedem beliebigen Inhalt gefüllt werken darf.
+
+Die Integrität von Zeilen lässt sich auf zwei Arten testen:
+
+Zum einen der "rowColumnMismatch"-Test welcher eine gleiche Positionierung der Studenten-Tabelleninhalte und Lösungs-Tabelleninhalte prüft,
+hierfür müsste "Tabelleninhalt 1" an Position (1,1), "Tabelleninhalt A" an Position (1,2) und "Tabelleninhalt 2" an Position (2,1) sein.
+
+Zum anderen über einen "rowMismatch"-Test welcher nur den Zusammenhang von Zeilen prüft.
+Hierbei müsste "Tabelleninhalt 1" und "Tabelleninhalt A" immer in derselben Zeile stehen und könnte somit z.B. mit "Tabelleninhalt 3" und "Tabelleninhalt C" die Position getauscht haben.
+
+
+
+### Test-Methoden
 
 ***table( TABELLENTESTKLASSE )***
 - **Funktionalität:** Beginn eines Tabellen-Tests.
-- **Parameter:** Tabellen-Test-Klasse = Eine Klasse, welche das [Tabellen-Test-Interface](src/main/java/thkoeln/divekithelper/table/TableTestInterface.java) implementiert.
+- **Parameter:** Tabellen-Test-Klasse = Eine Klasse, welche die Tabellen-Tests implementiert.
 
 
 ***rowColumnMismatch()***
@@ -81,31 +117,58 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - **Funktionalität:** Führt den Test durch und generiert das Ergebnis.
 - **Parameter:** Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
+---
 
-### Klassendiagrammtests
+## Klassendiagrammtest
+
+
+### Testart
+
+Im Tabellentest werden uxf-Datein eingelesen, welche von UMLet erstellt wurden.
+Es werden zwei Diagramme angegeben, ein Studen-Diagramm und ein Lösungs-Diagramm.
+
+Es können die Klassen und Relationen auf ihre Klassen-Namen, Klassen-Attribute, Relations-Typen und Relations-Multiplizitäten geprüft werden.
+
+Zudem lässt sich prüfen, ob alle Klassen vorhanden sind, welche in einem Glossar stehen, dass dem Tabellen-Test Format entspricht.
+
+In dem Lösungs-Diagramm lässt sich eine Relation mittels gepunkteter-Linie als beliebige Relation markieren (`lt=..`).
+Eine beliebige Relation muss im Studenten-Diagramm auch die gleichen zwei Klassen verbinden, der Relations-Typ und die Multiplizitäten sind dabei aber egal.
+
+Sollte eine Lösungs-Relation keine Multiplizität angeben, ist hier auch jede Art der Multiplizität erlaubt.
+
+### Test-Methoden
 
 ***classDiagram( KLASSENDIAGRAMMTESTKLASSE )***
 - **Funktionalität:** Beginn eines Klassen-Diagramm-Tests.
-- **Parameter:** Klassendiagramm-Test-Klasse =  Eine Klasse, welche das [ClassDiagram-Test-Interface](src/main/java/thkoeln/divekithelper/classDiagram/ClassDiagramTestInterface.java) implementiert.
+- **Parameter:** Klassendiagramm-Test-Klasse =  Eine Klasse, welche die Klassendiagramm-Tests implementiert.
 
 ***missingClasses()***
 - **Funktionalität:** Testet, ob eine Klasse im Diagramm fehlt.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche im Diagramm fehlen.
 
+***wrongClasses()***
+- **Funktionalität:** Testet, ob eine Klasse im Diagramm falsch (überflüssig) ist.
+- **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche im Diagramm falsch ist.
+
+***ClassWrongAttributes()***
+- **Funktionalität:** Testet, ob eine Klasse im Nutzer-Diagramm andere Attribute als das Lösungs-Diagramm hat.
+- **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben, welche im andere Attribute haben.
+
 ***missingRelations()***
-- **Funktionalität:** Testet, ob eine Relation im Diagramm fehlt.
+- **Funktionalität:** Testet, ob eine Relation im Diagramm fehlt (sollten mehrere Relationen zwischen zwei Klassen bestehen, aber ein Student erstellt nur eine, so werden die Restlichen nicht als fehlend ausgegeben) .
 - **Platzhalter:** `_RELATION_` = Hiermit lassen sich die Relationen ausgeben, welche im Diagramm fehlen.
 
-***mismatch()***
-- **Funktionalität:** Testet, ob es einen Unterschied zwischen dem Glossar und dem Diagramm gibt.
-- **Platzhalter:** `_MISMATCH_` = Hiermit lassen sich die Unterschiede zwischen dem Diagramm und Glossar ausgeben.
-
 ***wrongRelations()***
-- **Funktionalität:** Testet, ob eine im Diagramm bestehende Relation überflüssig ist.
-- **Platzhalter:** `_RELATION_` = Hiermit lassen sich die Relationen ausgeben, welche im Diagramm überflüssig sind.
+- **Funktionalität:** Testet, ob eine im Diagramm bestehende Relation überflüssig ist oder die falschen Attribute hat.
+- **Platzhalter:** `_RELATION_` = Hiermit lassen sich die Relationen ausgeben, welche im Diagramm überflüssig sind oder die falschen Attribute haben.
+
+***mismatch( GLOSSARPFAD, SPALTENNAME )***
+- **Funktionalität:** Testet, ob es einen Unterschied zwischen dem Glossar (welches die Klassen-Namen auflistet) und dem Diagramm gibt.
+- **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben welche nur in einem zwischen Diagramm und Glossar vorhanden sind aber nicht in beiden.
+- **Parameter:** GlossarPfad = Der Pfad zum Glossar, welches alle welches dem Diagramm zugehörig ist./ Spaltenname = Name der Spalte in der die Klassennamen stehen.
 
 ***illegalElementes()***
-- **Funktionalität:** Testet, ob ein Zeichen im Diagramm verwendet wird, welches von UMLet nicht erkannt wird.
+- **Funktionalität:** Testet, ob ein Element im Diagramm verwendet wird, welches nicht erlaubt ist (erlaubte Elemente: UMLClass, Relation, UMLNote).
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich die Elemente ausgeben, welche im Diagramm vorhanden sind, aber von UMLet nicht erkannt werden.
 
 ***message( TESTLEVEL, NACHRICHT )***
@@ -119,10 +182,19 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - **Funktionalität:** Führt den Test durch und generiere das Ergebnis.
 - **Parameter:** Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
+---
 
-### Codetests
+## Codetest
 
-*Hinweis*: Im Codetest lassen sich nur Annotation mit der RetentionPolicy Runtime ansprechen.
+### Testart
+
+Die Code-Tests testen den Code mittels Reflection.
+Dies führt zu der Einschränkung, nur Annotation mit der RetentionPolicy Runtime testbar sind.
+
+Für den "stacktrace"-Test werden die vom SurefireReports generierten xml-Datieren ausgelesen.
+
+### Test-Methoden
+
 
 ***classes( PAKETPFAD )***
 - **Funktionalität:** Beginn eines Code-Tests.
@@ -177,7 +249,9 @@ Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte e
 - *Funktionalität:* Führt den Test durch und generiere das Ergebnis.
 - *Parameter:* Testname = Der Name, unter welchem der Test den Nutzern angezeigt wird./ Testkategorie = Der Name der Kategorie, unter welche dieser Test einsortiert wird.
 
-### Beispiele
+---
+
+## Beispiele
 
 Für einen Überblick über die Einsatzmöglichkeiten der DSL gibt es Beispiele zu allen 3 Test-Kategorien:
 
@@ -189,7 +263,7 @@ Für einen Überblick über die Einsatzmöglichkeiten der DSL gibt es Beispiele 
 
 ---
 
-## Divekit-Helper Aufbau
+# Divekit-Helper Aufbau
 
 
 Insgesamt umfasst der Divekit-Helper einen allgemeinen und drei spezialisierte Teile.
@@ -199,42 +273,46 @@ Der [common](src/main/java/thkoeln/divekithelper/common)-Ordner enthält die all
 Diese allgemeinen Klassen bestehen aus:
 - [DivekitHelper](src/main/java/thkoeln/divekithelper/common/DivekitHelper.java): Implementiert die Methoden, die von allen drei Spezialisierungen genutzt werden.
 - [JSONHelper](src/main/java/thkoeln/divekithelper/common/JSONHelper.java): Ermöglicht das Generieren und Speichern der Testergebnisse, in einem vom Divekit-Report-Visualizer kompatiblen Format.
-- [XMLHelper](src/main/java/thkoeln/divekithelper/common/XMLHelper.java): Stellt das Extrahieren von Stacktraces aus Surefire-Reports zur verfügung.
 - [CommitFrequencyInterface](src/main/java/thkoeln/divekithelper/common/CommitFrequencyInterface.java): Definiert die Funktionalität, welche eine Commit-Frequency-Klasse aufweisen muss. Diese Klasse ist für das Test-Level verantwortlich.
 
 Die drei Spezialisierungen bestehen aus den Testarten: [Tabellen-Tests](src/main/java/thkoeln/divekithelper/table), [Klassendiagramm-Tests](src/main/java/thkoeln/divekithelper/classDiagram) und [Code-Tests](src/main/java/thkoeln/divekithelper/code).
 Alle drei sind nach derselben Struktur aufgebaut:
 - Im Interface Ordner wird die DSL definiert, indem für jeden Zustand der DSL ein Interface die möglichen nächsten Befehle festgelegt.
 - Die Builder-Klasse implementiert diese Interfaces und ist die Klasse, welche beim Benutzen der DSL aufgerufen wird.
-- Die Hauptklasse kümmert sich um das Ausführen der Tests und wird vom Builder aufgerufen. Außerdem generiert sie das Ergebnis und gibt es an den JSONHelper weiter. 
-- Des Weiteren gibt es noch zwei Test-Interfaces in dem Tabellen- und Klassendiagramm-Ordner, welche für eine Kompatibilität mit dem Divekit-Helper von den entsprechenden Test-Klassen implementiert werden müssen.
+- Die Hauptklasse kümmert sich um das Ausführen der Test-Klasse und wird vom Builder aufgerufen. Außerdem generiert sie das Ergebnis und gibt es an den JSONHelper weiter. 
 
-Zuletzt gibt es noch einen [Beispiel-Ordner](src/main/java/thkoeln/divekithelper/mock), welcher zum Testen der DSL dient.
+Des Weiteren haben die Tabellen- und Klassendiagramm-Tests eigene Parser, welche das Auslesen der UMLet und Markdown Dateien übernehmen, sowie Test Klassen welche die Tests auf den durch das Auslesen generierten Java-Klassen ausführen.
+
+Der Code-Test hat keine eigne Parser oder Test-Klasse sondern führt die Tests direkt in der Hauptklasse mittels Reflection aus.
+
+Zuletzt gibt es noch einen [Mock-Ordner](src/main/java/thkoeln/divekithelper/mock), welcher zum Testen der DSL dient.
 Hierfür stellt er folgende Dateien zur verfügung:
-- Einen [Ordner](src/main/java/thkoeln/divekithelper/mock/implementations) mit Beispiel-Implementationen der Interfaces.
-- Einen [Ordner](src/main/java/thkoeln/divekithelper/mock/repo) mit einem Repository, um den Code-Test testen zu können.
-- Einen [Ordner](src/main/java/thkoeln/divekithelper/mock/tables) mit Tabellen, um den Tabellen-Test testen zu können.
+- [Implementation](src/main/java/thkoeln/divekithelper/mock/implementations) mit einer Beispiel-Implementation der CommitFrequency-Klasse.
+- [Repository](src/main/java/thkoeln/divekithelper/mock/repo) mit einem Repository, um den Code-Test testen zu können.
+- [Tabellen](src/main/java/thkoeln/divekithelper/mock/tables) mit Tabellen, um den Tabellen-Test testen zu können.
+- [Diagramme](src/main/java/thkoeln/divekithelper/mock/diagrams) mit Klassen-Diagrammen, um den Klassendiagramm-Test testen zu können.
 
-## Implementations-Hinweise
+---
 
-### Aktueller Stand & notwendige Implementierungen
+# Implementations-Hinweise
 
-Der Helper besitzt noch nicht alle Funktionen um vollständig eingesetzt werden zu können.
-Die folgenden Funktionen sind bereits fertig:
-- Die DSL (die Syntax)
-- Der Code-Test
-- Das Generieren von Ergebnissen
+## Aktueller Stand & notwendige Implementierungen
 
-Während andere Funktionen noch eine Implementierung von Interfaces benötigen:
-- Die [Tabellen-](src/main/java/thkoeln/divekithelper/table/TableTestInterface.java) und [Klassendiagramm-Tests]((src/main/java/thkoeln/divekithelper/classDiagram/DiagramTestInterface.java))
-- Das Bestimmen der [Test-Level](src/main/java/thkoeln/divekithelper/common/CommitFrequencyInterface.java)
 
-Beim Erstellen der Tabellen-Test-Klasse sollte die momentane Benutzung der Tabellen berücksichtigt werden, so gibt es z.B. Spalten welche einen Platzhalter ("...") besitzen und von Studenten beliebig ausgefüllt werden dürfen oder mehrere Begriffe in einer Zelle, welche in beliebiger Reihenfolge stehen dürfen.
+Das Bestimmen der [Test-Level](src/main/java/thkoeln/divekithelper/common/CommitFrequencyInterface.java) ist noch nicht implementiert. Es ist geplant, dies in einem weiterführenden Projekt zu ergänzen.
+
+Der Helper kann jedoch auch schon ohne ein dynamisches Test-Level benutzt werden. Hierzu kann man das Test-Level statisch auf z.B. 1 festlegen und die Tests ausführen. 
+Dies ermöglicht aber nur ein statisches Feedback.
 
 Die momentane Beispiel-Commit-Frequency-Klasse arbeitet mit einer lokalen Datei, welche bei jedem Push auf das Repo in der Pipeline verändert wird. Diese Implementierung dient nur demonstrationszwecken und berücksichtigt nicht, welche Aufgaben bearbeitet wurden, sondern erhöht das Level eines Tests bei jedem Aufruf.
-Bei einer richtigen Implementierung sollten die bearbeiteten Aufgaben jedoch eine Rolle spielen. Außerdem sollte das Speichern der Level nicht über ein Push aus der Pipeline funktionieren, sondern beispielsweise über Caching oder einen Server auf den der Gitlab-Runner zugriff hat.
+Bei einer richtigen Implementierung sollten die bearbeite Aufgaben jedoch eine Rolle spielen. Außerdem sollte das Speichern der Level nicht über ein Push aus der Pipeline funktionieren, sondern beispielsweise über Caching oder einen Server auf den der Gitlab-Runner zugriff hat.
 
-### Integration
+---
+
+## Integration
+*Hinweis:* In fertiger Version ist geplannt den Helper mittels JitPack einfacher installieren zu können.
+
+
 Zuerst sollte man aus dem Divekit-Helper eine Jar builden und sie dem Projekt hinzufügen.
 Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen.
 
@@ -245,7 +323,7 @@ Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werd
     - mvn pmd:pmd  # buildcleancodereport
     - mvn verify -fn # Always return status code 0 => Continue with the next stage
     - mvn compile exec:java # run DivekitHelper
-    - mv target/pmd.net.sourceforge.pmd.renderers.JsonRenderer target/Test.pmd.json
+    - mv target/pmd.net.sourceforge.pmd.renderers.JsonRendererten target/Test.pmd.json
     - chmod ugo+x ./divekit-rv
     - ./divekit-rv target/Test.pmd.json target/surefire-reports/TEST-*.xml DivekitHelperResult.custom-test.json
 ```
@@ -284,6 +362,9 @@ Ausführen (in diesem Beispiel befinden sich die Divekit-Helper Befehle in der K
 		</configuration>
 	</plugin>
 ```
+
+*Hinweis:* Die Folgende MockCommitFrequency Implementierung dient nur Demonstrationszwecken und kann bei einer statischen Test-Level benutzung weggelassen werden.
+
 
 Die momentane MockCommitFrequency-Klasse speichert das Test-Level, indem sie in der Piepline einen Push durchführt, dies sollte in der fertigen Version eleganter z.B. durch Caching oder einen Server gelöst werden.
 Da diese Version jedoch mit einem Push arbeitet, benötigt sie einen Project Access Token und folgendes CI/CD-Skript nach dem Ausführen des Helpers:

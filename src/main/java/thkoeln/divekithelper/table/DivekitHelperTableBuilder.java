@@ -29,26 +29,26 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
                                                     DivekitHelperTableBuilderPostMessage {
 
 
-    private List<DivekitHelperTable> divekitHelperTableTests = new ArrayList<DivekitHelperTable> ();
+    private List<DivekitHelperTable> divekitHelperTableTests = new ArrayList<> ();
 
-    private List<DivekitHelperTable> tableTestsMissingMessage = new ArrayList<DivekitHelperTable> ();
+    private List<DivekitHelperTable> tableTestsMissingMessage = new ArrayList<> ();
 
-    private TableTestInterface tableTest;
+    private TableTest tableTest;
 
     /**
      * Initiate a DivekitHelperTableTest and set the TableTest.
-     * @param tableTest a TableTest that implements the TableTestInterface
+     * @param tableTest a TableTest
      */
-    public DivekitHelperTableBuilder( TableTestInterface tableTest ){
+    public DivekitHelperTableBuilder( TableTest tableTest ){
         this.tableTest = tableTest;
     }
 
     /**
      * Initiate a DivekitHelperTableTest.
-     * @param tableTest a TableTest that implements the TableTestInterface
+     * @param tableTest a TableTest
      * @return a new Builder object
      */
-    public static DivekitHelperTableBuilderPostTable table( TableTestInterface tableTest ){
+    public static DivekitHelperTableBuilderPostTable table( TableTest tableTest ){
         return new DivekitHelperTableBuilder( tableTest );
     }
 
@@ -83,7 +83,7 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
     public DivekitHelperTableBuilder rowColumnMismatch(){
         divekitHelperTableTests.add( new DivekitHelperTable( tableTest ) );
         tableTestsMissingMessage.add( getCurrentDivekitHelperTableTest() );
-        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.ROWCOLUMNMISMATCH);
+        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.ROW_COLUMN_MISMATCH);
         return this;
     }
 
@@ -92,7 +92,7 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
      * @return this Builder object
      */
     public DivekitHelperTableBuilder rowMismatch(){
-        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.ROWMISMATCH );
+        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.ROW_MISMATCH);
         return this;
     }
 
@@ -119,7 +119,7 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
      * @return this Builder object
      */
     public DivekitHelperTableBuilder tooMany(){
-        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.TOOMANY );
+        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.TOO_MANY);
         return this;
     }
 
@@ -133,7 +133,7 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
         divekitHelperTableTests.add( new DivekitHelperTable( tableTest ) );
         tableTestsMissingMessage.add( getCurrentDivekitHelperTableTest() );
         getCurrentDivekitHelperTableTest().setColumn( expectedColumnName, actualColumnName );
-        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.WRONGCOLUMN );
+        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.WRONG_COLUMN);
         return this;
     }
 
@@ -147,7 +147,7 @@ public class DivekitHelperTableBuilder implements DivekitHelperTableBuilderPostT
         divekitHelperTableTests.add( new DivekitHelperTable( tableTest ) );
         tableTestsMissingMessage.add( getCurrentDivekitHelperTableTest() );
         getCurrentDivekitHelperTableTest().setColumn( expectedColumn, actualColumn );
-        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.WRONGCOLUMN );
+        getCurrentDivekitHelperTableTest().setTest( DivekitHelperTable.TestType.WRONG_COLUMN);
         return this;
     }
 

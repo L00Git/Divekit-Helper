@@ -8,12 +8,11 @@ import thkoeln.divekithelper.common.DivekitHelper;
 import java.util.List;
 
 /**
- * This class implements the tests associated with ClassDiagramms,
- * by making calls to the ClassDiagrammTest-Class and generating the corresponding output.
+ * This class creates test-calls to the ClassDiagrammTest-Class and generating the corresponding output.
  */
 public class DivekitHelperClassDiagram extends DivekitHelper {
 
-    private ClassDiagramTestInterface classDiagramTest;
+    private ClassDiagramTest classDiagramTest;
 
     @Getter
     private String comment = null;
@@ -21,13 +20,13 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
     @Setter
     private TestType test = TestType.NONE;
 
-    public enum TestType { NONE, MISSINGCLASS, MISSINGRELATION, MISMATCH, WRONGRELATION, ILLEGALELEMENTS }
+    public enum TestType { NONE, MISSING_CLASS, WRONG_CLASS, CLASS_WRONG_ATTRIBUTES, MISSING_RELATION, MISMATCH, WRONG_RELATION, ILLEGAL_ELEMENTS }
 
     /**
      * Initiate the class.
-     * @param classDiagramTest a ClassDiagrammTest-Class that implements the ClassDiagrammTestInterface
+     * @param classDiagramTest a ClassDiagrammTest
      */
-    public DivekitHelperClassDiagram( ClassDiagramTestInterface classDiagramTest ){
+    public DivekitHelperClassDiagram( ClassDiagramTest classDiagramTest ){
         this.classDiagramTest = classDiagramTest;
     }
 
@@ -45,16 +44,20 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
         switch (test) {
             case NONE:
                 return false;
-            case MISSINGCLASS:
+            case MISSING_CLASS:
                 return testMissingClass(message);
-            case MISSINGRELATION:
+            case WRONG_CLASS:
+                return testWrongClass(message);
+            case MISSING_RELATION:
                 return testMissingRelation(message);
+            case WRONG_RELATION:
+                return testWrongRelations(message);
             case MISMATCH:
                 return testMismatch(message);
-            case WRONGRELATION:
-                return testWrongRelations(message);
-            case ILLEGALELEMENTS:
+            case ILLEGAL_ELEMENTS:
                 return testIllegalElements(message);
+            case CLASS_WRONG_ATTRIBUTES:
+                return testClassWrongAttributes(message);
             default:
                 throw new IllegalArgumentException();
         }
@@ -77,6 +80,38 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
     }
 
     /**
+     * Tests, whether the diagram contains wrong (unnecessary) classes.
+     * @param message message that will be displayed, if the test fails
+     * @return true if no wrong class is present, false otherwise
+     */
+    private boolean testWrongClass( String message ){
+        List<String> wrongClasses =  classDiagramTest.getWrongClasses();
+
+        if( wrongClasses.size() < 1 )
+            return true;
+
+        comment = replaceMessageElement( message, "_CLASS_", wrongClasses );
+
+        return false;
+    }
+
+    /**
+     * Tests, whether any classes in the user diagram do not have the same attributes as the solution classes.
+     * @param message message that will be displayed, if the test fails
+     * @return true if no user class has different attributes, false otherwise
+     */
+    private boolean testClassWrongAttributes( String message ){
+        List<String> classesWithWrongAttributes = classDiagramTest.getClassesWithWrongAttributes();
+        if ( classesWithWrongAttributes.size() < 1 )
+            return true;
+
+        comment = replaceMessageElement( message, "_CLASS_", classesWithWrongAttributes );
+
+        return false;
+    }
+
+
+    /**
      * Tests, whether the diagram is missing a relation.
      * @param message message that will be displayed, if the test fails
      * @return true if no relation is missing, false otherwise
@@ -93,25 +128,9 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
     }
 
     /**
-     * Tests, whether the diagram and glossary have a mismatch.
+     * Tests, whether an existing relation is unnecessary or has wrong attributes.
      * @param message message that will be displayed, if the test fails
-     * @return true if no mismatch is present, false otherwise
-     */
-    private boolean testMismatch( String message ){
-        List<String> mismatch =  classDiagramTest.getMismatch();
-
-        if( mismatch.size() < 1 )
-            return true;
-
-        comment = replaceMessageElement( message, "_MISMATCH_", mismatch );
-
-        return false;
-    }
-
-    /**
-     * Tests, whether an existing relation is unnecessary.
-     * @param message message that will be displayed, if the test fails
-     * @return true if no relation is unnecessary, false otherwise
+     * @return true if no relation is unnecessary or has wrong attributes, false otherwise
      */
     private boolean testWrongRelations( String message ){
         List<String> wrongRelations =  classDiagramTest.getWrongRelations();
@@ -123,6 +142,29 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
 
         return false;
     }
+
+    /**
+     * Tests, whether the diagram and glossary have a mismatch.
+     * @param message message that will be displayed, if the test fails
+     * @return true if no mismatch is present, false otherwise
+     */
+    private boolean testMismatch( String message ){
+
+        if( classDiagramTest.getGlossaryClassNames() == null ){
+            comment = "Cannot load Glossary-Table";
+            return false;
+        }
+
+        List<String> mismatch =  classDiagramTest.getMismatch();
+
+        if( mismatch.size() < 1 )
+            return true;
+
+        comment = replaceMessageElement( message, "_CLASS_", mismatch );
+
+        return false;
+    }
+
 
     /**
      * Tests, whether the diagram contains any illegal elements.
@@ -138,6 +180,16 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
 
         return false;
     }
+
+    /**
+     * Sets the glossary information that is being used in a mismatch test.
+     * @param glossaryPath  path to the glossary
+     * @param columnOfClassNames name of the column, which contains the Class names
+     */
+    public void setGlossary( String glossaryPath, String columnOfClassNames ){
+        classDiagramTest.setGlossary( glossaryPath, columnOfClassNames );
+    }
+
 
     /**
      * Replace a specific element in the message with a list of other elements.
@@ -158,6 +210,13 @@ public class DivekitHelperClassDiagram extends DivekitHelper {
      * @return true if no test fails and false otherwise
      */
     public boolean combineResults( List<DivekitHelperClassDiagram> diagramTests, String testName, String testCategory ){
+
+        if( !classDiagramTest.isTestValid() ){
+            setTestName( testName );
+            setTestCategory( testCategory );
+            postResult("Test invalid, cannot read a resource.", false);
+            return false;
+        }
 
         boolean result = true;
 

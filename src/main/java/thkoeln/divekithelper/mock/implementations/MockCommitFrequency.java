@@ -47,7 +47,7 @@ public class MockCommitFrequency implements CommitFrequencyInterface {
 
         if( identifier == null ){
             System.out.println("Cannot find  'CI_PROJECT_PATH' EnvironmentVariable returning TestLevel 1");
-            return 1;
+            return 2;
         }
 
 

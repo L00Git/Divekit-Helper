@@ -1,7 +1,6 @@
 package thkoeln.divekithelper.classDiagram;
 
 import org.junit.jupiter.api.Test;
-import thkoeln.divekithelper.mock.implementations.MockClassDiagramTest;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,169 +8,305 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static thkoeln.divekithelper.classDiagram.DivekitHelperClassDiagramBuilder.*;
 
 public class DivekitHelperClassDiagramBuilderTest {
+    @Test
+    void eo02Passing(){
+        assertEquals(true,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedPassing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
+                    .missingClasses()
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                    .combine()
+                    .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                    .combine()
+                    .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                    .combine()
+                    .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                    .combine()
+                    .missingRelations()
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                    .combine()
+                    .wrongRelations()
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                    .combine()
+                    .illegalElements()
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                    .combine()
+                    .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                    .test("E02Passing", "Class-Diagram Test")
+                );
+    }
 
     @Test
-    void isClassMissing()  {
+    void eo02Failing(){
         assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedFailing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
                         .missingClasses()
-                            .message(1, "A Class is missing.")
-                            .message(2, "_CLASS_ is missing.")
-                        .test("MissingClass", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void isClassMissingPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
-                        .missingClasses()
-                            .message(1, "A Class is missing.")
-                            .message(2, "_CLASS_ is missing.")
-                        .test("MissingClassPassing", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void isRelationMissing()  {
-        assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                        .combine()
                         .missingRelations()
-                            .message(1, "A Relation is missing.")
-                            .message(2, "_RELATION_ is missing.")
-                        .test("Relation", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void isRelationMissingPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
-                        .missingRelations()
-                            .message(1, "A Relation is missing.")
-                            .message(2, "_RELATION_ is missing.")
-                        .test("RelationPassing", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void mismatch()  {
-        assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
-                        .mismatch()
-                            .message(1, "There is a mismatch between the diagram and glossary.")
-                            .message(2, "_MISMATCH_ is not matching the glossary.")
-                        .test("Mismatch", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void mismatchPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
-                        .mismatch()
-                            .message(1, "There is a mismatch between the diagram and glossary.")
-                            .message(2, "_MISMATCH_ is not matching the glossary.")
-                        .test("MismatchPassing", "ClassDiagramTest")
-        );
-    }
-    @Test
-    void wrongRelation()  {
-        assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                        .combine()
                         .wrongRelations()
-                            .message(1, "A wrong Relation is present.")
-                            .message(2, "This Relation shouldn't exist: _Relation_ .")
-                        .test("WrongRelation", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void wrongRelationPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
-                        .wrongRelations()
-                            .message(1, "A wrong Relation is present.")
-                            .message(2, "This Relation shouldn't exist: _RELATION_ .")
-                        .test("WrongRelationPassing", "ClassDiagramTest")
-        );
-    }
-
-    @Test
-    void illegalElement()  {
-        assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                        .combine()
                         .illegalElements()
                         .message(1, "A illegal Element is present.")
-                        .message(2, "UMLet does not allow _ELEMENT_.")
-                        .test("IllegalElement", "ClassDiagramTest")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing", "Class-Diagram Test")
         );
     }
 
     @Test
-    void illegalElementPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
+    void eo02Failing2(){
+        assertEquals(false,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedFailing2.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
+                        .missingClasses()
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                        .combine()
+                        .missingRelations()
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                        .combine()
+                        .wrongRelations()
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                        .combine()
                         .illegalElements()
                         .message(1, "A illegal Element is present.")
-                        .message(2, "UMLet does not allow _ELEMENT_.")
-                        .test("IllegalElementPassing", "ClassDiagramTest")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing2", "Class-Diagram Test")
         );
     }
 
-
-
     @Test
-    void combined()  {
+    void eo02FinalFailing(){
         assertEquals(false,
-                classDiagram( new MockClassDiagramTest("1") )
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalModifiedFailing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalSolution.uxf") )
                         .missingClasses()
-                            .message(1, "A Class is missing.")
-                            .message(2, "_CLASS_ is missing.")
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
                         .combine()
                         .missingRelations()
-                            .message(1, "A Relation is missing.")
-                            .message(2, "_RELATION_ is missing.")
-                        .combine()
-                        .mismatch()
-                            .message(1, "There is a mismatch between the diagram and glossary.")
-                            .message(2, "_MISMATCH_ is not matching the glossary.")
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
                         .combine()
                         .wrongRelations()
-                            .message(1, "A wrong Relation is present.")
-                            .message(2, "This Relation shouldn't exist: _Relation_ .")
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
                         .combine()
                         .illegalElements()
-                            .message(1, "A illegal Element is present.")
-                            .message(2, "UMLet does not allow _ELEMENT_.")
-                        .test("Combined", "ClassDiagramTest")
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02FinalFailing", "Class-Diagram Test")
         );
     }
 
+
     @Test
-    void combinedPassing()  {
-        assertEquals(true,
-                classDiagram( new MockClassDiagramTest("2") )
+    void eo02WrongResourcePath(){
+        //Wrong User-Diagram Path
+        assertEquals(false,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E03modifiedPassing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
                         .missingClasses()
-                            .message(1, "A Class is missing.")
-                            .message(2, "_CLASS_ is missing.")
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
                         .combine()
                         .missingRelations()
-                            .message(1, "A Relation is missing.")
-                            .message(2, "_RELATION_ is missing.")
-                        .combine()
-                        .mismatch()
-                            .message(1, "There is a mismatch between the diagram and glossary.")
-                            .message(2, "_MISMATCH_ is not matching the glossary.")
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
                         .combine()
                         .wrongRelations()
-                            .message(1, "A wrong Relation is present.")
-                            .message(2, "This Relation shouldn't exist: _Relation_ .")
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
                         .combine()
                         .illegalElements()
-                            .message(1, "A illegal Element is present.")
-                            .message(2, "UMLet does not allow _ELEMENT_.")
-                        .test("CombinedPassing", "ClassDiagramTest")
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing User-Diagram", "Class-Diagram Test")
+        );
+        //Wrong Solution-Diagram Path
+        assertEquals(false,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedPassing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E03Solution.uxf") )
+                        .missingClasses()
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                        .combine()
+                        .missingRelations()
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                        .combine()
+                        .wrongRelations()
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                        .combine()
+                        .illegalElements()
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing Solution-Diagram", "Class-Diagram Test")
+        );
+        //Wrong Glossary Path
+        assertEquals(false,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedPassing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
+                        .missingClasses()
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/lossary.md","Geschäftsobjekt")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                        .combine()
+                        .missingRelations()
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                        .combine()
+                        .wrongRelations()
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                        .combine()
+                        .illegalElements()
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing Glossary", "Class-Diagram Test")
+        );
+        //Wrong Glossary Column-Name
+        assertEquals(false,
+                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02modifiedPassing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02Solution.uxf") )
+                        .missingClasses()
+                        .message(1, "A Class is missing.")
+                        .message(2, "_CLASS_ is missing.")
+                        .combine()
+                        .wrongClasses()
+                        .message(1, "A Class in unnecessary.")
+                        .message(2, "_CLASS_ is unnecessary.")
+                        .combine()
+                        .mismatch("src/main/java/thkoeln/divekithelper/mock/diagrams/Glossary.md","G")
+                        .message(1, "A Class is only present in the glossary or the diagram but not in both.")
+                        .message(2, "_CLASS_ is only present in the glossary or the diagram but not in both.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has wrong Attributes.")
+                        .message(2, "_CLASS_ has wrong Attributes.")
+                        .combine()
+                        .missingRelations()
+                        .message(1, "A Relation is missing.")
+                        .message(2, "_RELATION_ is missing.")
+                        .combine()
+                        .wrongRelations()
+                        .message(1, "A Relation is wrong.")
+                        .message(2, "_RELATION_ is wrong.")
+                        .combine()
+                        .illegalElements()
+                        .message(1, "A illegal Element is present.")
+                        .message(2, "Class-Diagrams do not allow _ELEMENT_.")
+                        .combine()
+                        .classWrongAttributes()
+                        .message(1, "A Class has the wrong Attributes.")
+                        .message(2, "_CLASS_ has the wrong Attributes.")
+                        .test("E02Failing Glossary Column-Name", "Class-Diagram Test")
         );
     }
+
 }

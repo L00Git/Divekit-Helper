@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
+/**
+ * A Class generating the test output in JSON-Format.
+ */
 public class JSONHelper {
 
     final String  OUTPUT_PATH = "DivekitHelperResult.custom-test.json";
