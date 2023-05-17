@@ -65,8 +65,7 @@ public class MarkdownTableHelper {
             }
 
         } catch (Exception e) {
-            System.out.println("Couldn't load table from File.");
-            e.printStackTrace();
+            System.out.println("Couldn't load table from file.");
             markdownTable.setValid( false );
             return markdownTable;
         }

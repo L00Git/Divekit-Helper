@@ -61,7 +61,7 @@ public class DivekitHelperTable extends DivekitHelper {
         if( !tableTest.isTestValid() )
             return;
 
-        columnName1 = tableTest.getColumnNames()[columnNumber];
+        columnName1 = tableTest.getColumnName( columnNumber) ;
         column1 = columnNumber;
     }
 
@@ -90,8 +90,8 @@ public class DivekitHelperTable extends DivekitHelper {
             return;
 
 
-        this.columnName1 = tableTest.getColumnNames()[columnNumber1];
-        this.columnName2 = tableTest.getColumnNames()[columnNumber2];
+        this.columnName1 = tableTest.getColumnName( columnNumber1 ) ;
+        this.columnName2 = tableTest.getColumnName( columnNumber2 ) ;
         column1 = columnNumber1;
         column2 = columnNumber2;
     }

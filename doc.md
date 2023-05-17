@@ -166,10 +166,12 @@ Sollte eine Lösungs-Relation keine Multiplizität angeben, ist hier auch jede A
 - **Funktionalität:** Testet, ob es einen Unterschied zwischen dem Glossar (welches die Klassen-Namen auflistet) und dem Diagramm gibt.
 - **Platzhalter:** `_CLASS_` = Hiermit lassen sich die Klassen ausgeben welche nur in einem zwischen Diagramm und Glossar vorhanden sind aber nicht in beiden.
 - **Parameter:** GlossarPfad = Der Pfad zum Glossar, welches alle welches dem Diagramm zugehörig ist./ Spaltenname = Name der Spalte in der die Klassennamen stehen.
+- *Hinweis:* Sollte das angegebene Glossar nicht geladen werden können (z.B. weil die Markdown-Tabelle nicht existiert), so schlägt der Test fehl.
 
 ***illegalElementes()***
 - **Funktionalität:** Testet, ob ein Element im Diagramm verwendet wird, welches nicht erlaubt ist (erlaubte Elemente: UMLClass, Relation, UMLNote).
 - **Platzhalter:** `_ELEMENT_` = Hiermit lassen sich die Elemente ausgeben, welche im Diagramm vorhanden sind, aber von UMLet nicht erkannt werden.
+
 
 ***message( TESTLEVEL, NACHRICHT )***
 - **Funktionalität:** Definiert eine Nachricht, welche bei einem Fehler ausgegeben wird, wenn das entsprechende Test-Level erreicht wurde.

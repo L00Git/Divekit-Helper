@@ -39,14 +39,28 @@ public class TableTest {
     }
 
     /**
+     * Get a column name by its number.
+     * @param columnNumber number of the column.
+     * @return the column name
+     */
+    public String getColumnName( int columnNumber ){
+        if( getColumnNames().length < columnNumber + 1 ) {
+            testValid = false;
+            return null;
+        }
+        return getColumnNames()[columnNumber];
+    }
+
+    /**
      * Get a column number by its name.
      * @param columnName name of the column.
      * @return the column number
      */
     public int getColumnNumber( String columnName ){
         int columnNumber = Arrays.asList( solutionTable.getColumnNames() ).indexOf( columnName );
-        if(columnNumber == -1)
-            throw new InputMismatchException( "Couldn't find column "+ columnName) ;
+        if(columnNumber == -1) {
+            testValid = false;
+        }
         return columnNumber;
     }
 

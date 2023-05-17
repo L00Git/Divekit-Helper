@@ -27,7 +27,6 @@ public class SureFireHelper {
         try(Stream<Path> stream = Files.list( Path.of("target/surefire-reports" ))) {
             return stream.filter( file -> file.getFileName().toString().endsWith(".xml") ).map( Path::toFile ).collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Couldn't load surefire-reports.");
             return new ArrayList<>();
         }
@@ -55,7 +54,6 @@ public class SureFireHelper {
         } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println( "Couldn't`t load " + file.getName() + " StackTrace." );
         }
         return new ArrayList<>();

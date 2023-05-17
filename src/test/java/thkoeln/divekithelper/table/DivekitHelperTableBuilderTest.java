@@ -7,25 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static thkoeln.divekithelper.table.DivekitHelperTableBuilder.table;
 
 class DivekitHelperTableBuilderTest {
-    private TableTest e1a;
-    private TableTest e1b;
-    private TableTest e1c;
-    private TableTest e1d;
-    private TableTest e3a;
-    private TableTest e3a2;
-    private TableTest e3b;
+    private String e1a = "src/main/java/thkoeln/divekithelper/mock/tables/E01a.md";
+    private String e1aSolution = "src/main/java/thkoeln/divekithelper/mock/tables/E01aSolution.md";
+    private String e1a2 = "src/main/java/thkoeln/divekithelper/mock/tables/E01a2.md";
+    private String e1b = "src/main/java/thkoeln/divekithelper/mock/tables/E01b.md";
+    private String e1bSolution = "src/main/java/thkoeln/divekithelper/mock/tables/E01bSolution.md";
+    private String e1c = "src/main/java/thkoeln/divekithelper/mock/tables/E01c.md";
+    private String e1cSolution = "src/main/java/thkoeln/divekithelper/mock/tables/E01cSolution.md";
+    private String e1d = "src/main/java/thkoeln/divekithelper/mock/tables/E01d.md";
+    private String e1dSolution = "src/main/java/thkoeln/divekithelper/mock/tables/E01dSolution.md";
+    private String e3a = "src/main/java/thkoeln/divekithelper/mock/tables/E3a.md";
+    private String e3aSolution = "src/main/java/thkoeln/divekithelper/mock/tables/E3aSolution.md";
+    private String e3a2 = "src/main/java/thkoeln/divekithelper/mock/tables/E3a2.md";
+    private String e3a2Solution = "src/main/java/thkoeln/divekithelper/mock/tables/E3a2Solution.md";
+    private String e3b ="src/main/java/thkoeln/divekithelper/mock/tables/E3b.md";
+    private String e3bSolution ="src/main/java/thkoeln/divekithelper/mock/tables/E3bSolution.md";
 
-    @BeforeEach
-    void setupTestClasses(){
-        e1a = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E01a.md", "src/main/java/thkoeln/divekithelper/mock/tables/E01aSolution.md");
-        e1b = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E01b.md", "src/main/java/thkoeln/divekithelper/mock/tables/E01bSolution.md");
-        e1c = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E01c.md", "src/main/java/thkoeln/divekithelper/mock/tables/E01cSolution.md");
-        e1d = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E01d.md", "src/main/java/thkoeln/divekithelper/mock/tables/E01dSolution.md");
-        e3a = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E3a.md", "src/main/java/thkoeln/divekithelper/mock/tables/E3aSolution.md");
-        e3a2 = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E3a2.md", "src/main/java/thkoeln/divekithelper/mock/tables/E3a2Solution.md");
-        e3b = new TableTest("src/main/java/thkoeln/divekithelper/mock/tables/E3b.md", "src/main/java/thkoeln/divekithelper/mock/tables/E3bSolution.md");
-
-    }
 
 
 
@@ -33,7 +30,7 @@ class DivekitHelperTableBuilderTest {
     void e1aTest(){
 
         assertEquals(false,
-                table(e1a)
+                table( new TableTest( e1a, e1aSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -52,7 +49,7 @@ class DivekitHelperTableBuilderTest {
         );
 
         assertEquals(false,
-                table(e1a)
+                table( new TableTest( e1a, e1aSolution ) )
                         .column("Begriff")
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -72,9 +69,36 @@ class DivekitHelperTableBuilderTest {
     }
 
     @Test
+    void e1a2Test(){
+        assertEquals( false,
+                table( new TableTest( e1a2, e1aSolution ) )
+                        .column(3)
+                        .missing()
+                        .message(1,"You are missing something.")
+                        .test("E1a2 Wrong Column Number", "TableTests")
+        );
+
+        assertEquals( false,
+                table( new TableTest( e1a2, e1aSolution ) )
+                        .column("Falscher Name")
+                        .missing()
+                        .message(1,"You are missing something.")
+                        .test("E1a2 Wrong Column Name", "TableTests")
+        );
+
+        assertEquals( false,
+                table( new TableTest( e1a2, e1aSolution ) )
+                        .rowColumnMismatch()
+                        .message(1,"_ELEMENT_ does not belong in the position it is currently in.")
+                        .test("E1a2 Different Row Count", "TableTests")
+        );
+
+    }
+
+    @Test
     void e1bTest(){
         assertEquals(false,
-                table(e1b)
+                table( new TableTest( e1b, e1bSolution ) )
                         .column(0)
                         .missing()
                             .message(1,"You are missing something.")
@@ -96,7 +120,7 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e1cTest(){
         assertEquals(false,
-                table(e1c)
+                table( new TableTest( e1c, e1cSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -118,7 +142,7 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e1dTest(){
         assertEquals(true,
-                table(e1d)
+                table( new TableTest( e1d, e1dSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -141,7 +165,7 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e3aTest(){
         assertEquals(true,
-                table(e3a)
+                table( new TableTest( e3a, e3aSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -154,7 +178,7 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e3a2Test(){
         assertEquals(false,
-                table(e3a2)
+                table( new TableTest( e3a2, e3a2Solution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")
@@ -166,7 +190,7 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e3bTest(){
         assertEquals(false,
-                table(e3b)
+                table( new TableTest( e3b, e3bSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(1,"An Element in this row is not matching the solution.")

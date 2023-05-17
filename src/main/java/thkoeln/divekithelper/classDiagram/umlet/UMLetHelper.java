@@ -78,7 +78,7 @@ public class UMLetHelper {
             }
         } catch (Exception e) {
             isValid = false;
-            e.printStackTrace();
+            System.out.println("Couldn't load diagram from file.");
         }
     }
 
