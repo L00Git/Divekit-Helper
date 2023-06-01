@@ -57,12 +57,12 @@ public class DivekitHelper {
         int testlevel = TestLevel.getTestLevel( testName, testCategory );
         String finalMessage = null;
 
-        for( ; testlevel > 0 && finalMessage == null; testlevel-- ){
+        for( ; testlevel >= 0 && finalMessage == null; testlevel-- ){
             finalMessage = messages.get( testlevel );
         }
 
         if( finalMessage == null ){
-            System.out.println("No message could be generated, at least one message of level 1 should always be set.");
+            System.out.println("No message could be generated, at least one message of level 0 should always be set.");
             System.exit(1);
         }
 
