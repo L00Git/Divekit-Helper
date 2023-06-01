@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class JSONHelper {
 
-    final String  OUTPUT_PATH = "DivekitHelperResult.custom-test.json";
+    private final String REPORT_OUTPUT_PATH = "DivekitHelperResult.custom-test.json";
 
     private JsonArray testCases = new JsonArray();
 
@@ -25,7 +25,7 @@ public class JSONHelper {
      * Initialise the class and try loading the content of the output file.
      */
     public  JSONHelper (){
-        try (FileReader fileReader = new FileReader(OUTPUT_PATH)){
+        try ( FileReader fileReader = new FileReader(REPORT_OUTPUT_PATH) ){
             testCases = (JsonArray) JsonParser.parseReader( fileReader );
         } catch (IOException | ClassCastException e) {
             System.out.println( "Couldn't`t load output json file." );
@@ -74,11 +74,11 @@ public class JSONHelper {
      * @param category the test category
      */
     private void remove(String name, String category){
-        for(JsonElement element: testCases){
+        for( JsonElement element: testCases ){
             JsonObject obj = element.getAsJsonObject();
-            if(obj.get("name") == null || obj.get("category") == null)
+            if( obj.get( "name" ) == null || obj.get( "category" ) == null )
                 return;
-            if( obj.get("name").getAsString().equals( name ) && obj.get("category").getAsString().equals( category )  ) {
+            if( obj.get( "name" ).getAsString().equals( name ) && obj.get( "category" ).getAsString().equals( category )  ) {
                 testCases.remove( element );
                 return;
             }
@@ -90,7 +90,7 @@ public class JSONHelper {
      */
     private void saveToFile(){
         Gson gson = new Gson();
-        try (FileWriter fileWriter = new FileWriter( OUTPUT_PATH )){
+        try (FileWriter fileWriter = new FileWriter(REPORT_OUTPUT_PATH)){
             gson.toJson( testCases, fileWriter );
         } catch (IOException e) {
             System.out.println( "Couldn't`t save output to json file." );

@@ -1,7 +1,8 @@
 package thkoeln.divekithelper.table;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import thkoeln.divekithelper.common.testlevel.TestLevel;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static thkoeln.divekithelper.table.DivekitHelperTableBuilder.table;
@@ -25,6 +26,11 @@ class DivekitHelperTableBuilderTest {
 
 
 
+    @Test
+    void testLevelGeneraitonTest() {
+        TestLevel.generateTestLevel("testLevelConfig.json");
+        System.out.println( TestLevel.getTestLevel("E3b","E3") );
+    }
 
     @Test
     void e1aTest(){
@@ -33,18 +39,18 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1a, e1aSolution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .combine()
                         .column(0)
                         .missing()
-                            .message(1,"You are missing something.")
-                            .message(2,"_ELEMENT_ is missing in _COLUMN1_.")
+                            .message(0,"You are missing something.")
+                            .message(1,"_ELEMENT_ is missing in _COLUMN1_.")
                         .combine()
                         .column(0)
                         .tooMany()
-                            .message(1,"A Element doesn't match the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
+                            .message(0,"A Element doesn't match the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
                         .test("E1a", "TableTests")
         );
 
@@ -52,18 +58,18 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1a, e1aSolution ) )
                         .column("Begriff")
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .combine()
                         .column("Begriff")
                         .missing()
-                            .message(1,"You are missing something.")
-                            .message(2,"_ELEMENT_ is missing in _COLUMN1_.")
+                            .message(0,"You are missing something.")
+                            .message(1,"_ELEMENT_ is missing in _COLUMN1_.")
                         .combine()
                         .column("Begriff")
                         .tooMany()
-                            .message(1,"A Element doesn't match the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
+                            .message(0,"A Element doesn't match the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
                         .test("E1aSameTestByName", "TableTests")
         );
     }
@@ -74,7 +80,7 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1a2, e1aSolution ) )
                         .column(3)
                         .missing()
-                        .message(1,"You are missing something.")
+                        .message(0,"You are missing something.")
                         .test("E1a2 Wrong Column Number", "TableTests")
         );
 
@@ -82,14 +88,14 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1a2, e1aSolution ) )
                         .column("Falscher Name")
                         .missing()
-                        .message(1,"You are missing something.")
+                        .message(0,"You are missing something.")
                         .test("E1a2 Wrong Column Name", "TableTests")
         );
 
         assertEquals( false,
                 table( new TableTest( e1a2, e1aSolution ) )
                         .rowColumnMismatch()
-                        .message(1,"_ELEMENT_ does not belong in the position it is currently in.")
+                        .message(0,"_ELEMENT_ does not belong in the position it is currently in.")
                         .test("E1a2 Different Row Count", "TableTests")
         );
 
@@ -101,18 +107,18 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1b, e1bSolution ) )
                         .column(0)
                         .missing()
-                            .message(1,"You are missing something.")
-                            .message(2,"_ELEMENT_ is missing in _COLUMN1_.")
+                            .message(0,"You are missing something.")
+                            .message(1,"_ELEMENT_ is missing in _COLUMN1_.")
                         .combine()
                         .column(0)
                         .tooMany()
-                            .message(1,"A Element doesn't match the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
+                            .message(0,"A Element doesn't match the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
                         .combine()
                         .column(0)
                         .capitalisation()
-                            .message(1,"Something does is wrongly capitalized.")
-                            .message(2, "_ELEMENT_ is wrongly capitalized.")
+                            .message(0,"Something does is wrongly capitalized.")
+                            .message(1, "_ELEMENT_ is wrongly capitalized.")
                         .test("E1b", "TableTests")
         );
     }
@@ -123,18 +129,18 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1c, e1cSolution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .combine()
                         .column(0)
                         .missing()
-                            .message(1,"You are missing something.")
-                            .message(2,"_ELEMENT_ is missing in _COLUMN1_.")
+                            .message(0,"You are missing something.")
+                            .message(1,"_ELEMENT_ is missing in _COLUMN1_.")
                         .combine()
                         .column(0)
                         .tooMany()
-                            .message(1,"A Element doesn't match the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
+                            .message(0,"A Element doesn't match the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
                         .test("E1c", "TableTests")
         );
     }
@@ -145,18 +151,18 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e1d, e1dSolution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .combine()
                         .column(0)
                         .missing()
-                            .message(1,"You are missing something.")
-                            .message(2,"_ELEMENT_ is missing in _COLUMN1_.")
+                            .message(0,"You are missing something.")
+                            .message(1,"_ELEMENT_ is missing in _COLUMN1_.")
                         .combine()
                         .column(0)
                         .tooMany()
-                            .message(1,"A Element doesn't match the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
+                            .message(0,"A Element doesn't match the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution in _COLUMN1_.")
                         .test("E1d", "TableTests")
         );
     }
@@ -168,8 +174,8 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e3a, e3aSolution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .test("E3a","TableTests")
         );
 
@@ -181,8 +187,8 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e3a2, e3a2Solution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .test("E3a2","TableTests")
         );
     }
@@ -193,8 +199,8 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e3b, e3bSolution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(1,"An Element in this row is not matching the solution.")
-                            .message(2,"_ELEMENT_ is not matching the solution.")
+                            .message(0,"An Element in this row is not matching the solution.")
+                            .message(1,"_ELEMENT_ is not matching the solution.")
                         .test("E3b","TableTests")
         );
     }

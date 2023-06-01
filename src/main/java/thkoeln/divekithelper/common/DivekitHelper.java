@@ -4,7 +4,7 @@ package thkoeln.divekithelper.common;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import thkoeln.divekithelper.code.SureFireHelper;
-import thkoeln.divekithelper.mock.implementations.MockCommitFrequency;
+import thkoeln.divekithelper.common.testlevel.TestLevel;
 
 import java.util.HashMap;
 
@@ -24,10 +24,6 @@ public class DivekitHelper {
     private String testName;
     @Setter
     private String testCategory;
-
-    private MockCommitFrequency commitFrequency = new MockCommitFrequency();
-
-
     /**
      * Save a message.
      * @param testLevel the test level, at which this message will be displayed
@@ -58,7 +54,7 @@ public class DivekitHelper {
     protected String getMessage(){
 
 
-        int testlevel = commitFrequency.getTestLevel( testName );
+        int testlevel = TestLevel.getTestLevel( testName, testCategory );
         String finalMessage = null;
 
         for( ; testlevel > 0 && finalMessage == null; testlevel-- ){

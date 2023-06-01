@@ -26,8 +26,8 @@ public class DivekitHelperCodeBuilderTest {
                     .withAnnotation( Entity.class )
                     .shouldHave()
                     .annotation(  javax.persistence.Id.class )
-                        .message(1, "Entities should have Ids.")
-                        .message(2, "_CLASS_ is an Entities and should have an Id.")
+                        .message(0, "Entities should have Ids.")
+                        .message(1, "_CLASS_ is an Entities and should have an Id.")
                     .test( "EntityId" , "AnnotationTest"));
     }
 
@@ -38,8 +38,8 @@ public class DivekitHelperCodeBuilderTest {
                         .withAnnotation( Embeddable.class )
                             .shouldNotHave()
                         .annotation( Id.class )
-                            .message(1, " VO should not have an ID.")
-                            .message(2, "_CLASS_ is a VO and shouldn't have a ID.")
+                            .message(0, " VO should not have an ID.")
+                            .message(1, "_CLASS_ is a VO and shouldn't have a ID.")
                         .test("VoNoId" , "AnnotationTest"));
 
         assertEquals(true,
@@ -47,8 +47,8 @@ public class DivekitHelperCodeBuilderTest {
                         .withAnnotation( Embeddable.class )
                         .shouldNotHave()
                         .annotation( Entity.class )
-                            .message(1, " VO should not also be an Entity.")
-                            .message(2, "_CLASS_ is a VO and shouldn't also be an Entity.")
+                            .message(0, " VO should not also be an Entity.")
+                            .message(1, "_CLASS_ is a VO and shouldn't also be an Entity.")
                         .test("VoNoEntity", "AnnotationTest"));
 
     }
@@ -60,9 +60,9 @@ public class DivekitHelperCodeBuilderTest {
                         .withAnnotation( Entity.class )
                         .shouldHave()
                         .otherClass( "_CLASS_Repository" )
-                            .message(1, "You are missing a Repository.")
-                            .message(2, "Entities should have Repositories.")
-                            .message(2, "_CLASS_ is missing a Repository.")
+                            .message(0, "You are missing a Repository.")
+                            .message(1, "Entities should have Repositories.")
+                            .message(1, "_CLASS_ is missing a Repository.")
                         .test("EntityRepo", "AnnotationTest"));
     }
 
@@ -72,8 +72,8 @@ public class DivekitHelperCodeBuilderTest {
                 classes("thkoeln.divekithelper.mock.repo")
                         .withAnnotation(Entity.class)
                         .inPackage("thkoeln.divekithelper.mock.repo.entities")
-                            .message(1, "All Entities should be in the Entity Folder")
-                            .message(2, "_CLASS_ is an Entity and should be in a Folder called entities")
+                            .message(0, "All Entities should be in the Entity Folder")
+                            .message(1, "_CLASS_ is an Entity and should be in a Folder called entities")
                         .test("EntityDirectory", "AnnotationTest"));
     }
 
@@ -82,8 +82,8 @@ public class DivekitHelperCodeBuilderTest {
         assertEquals(true,
                 classes("thkoeln.divekithelper.mock.repo")
                         .noCircularDependencies()
-                            .message(1,"Circular Dependencies should be avoided.")
-                            .message(2, "_CLASS_ has circular Dependencies.")
+                            .message(0,"Circular Dependencies should be avoided.")
+                            .message(1, "_CLASS_ has circular Dependencies.")
                         .test("CircularDependency", "AnnotationTest"));
     }
     @Test
@@ -92,8 +92,8 @@ public class DivekitHelperCodeBuilderTest {
                 classes("thkoeln.divekithelper.mock.repo")
                         .withAnnotation(Entity.class)
                         .noCircularDependencies()
-                            .message(1,"Circular Dependencies should be avoided in Entities.")
-                            .message(2, "_CLASS_ is an Entity and shouldn't have circular Dependencies.")
+                            .message(0,"Circular Dependencies should be avoided in Entities.")
+                            .message(1, "_CLASS_ is an Entity and shouldn't have circular Dependencies.")
                         .test("CircularDependencyEntity", "AnnotationTest"));
     }
 
@@ -104,8 +104,8 @@ public class DivekitHelperCodeBuilderTest {
                 classes("thkoeln.divekithelper.mock.repo")
                         .withAnnotation( Embeddable.class )
                         .immutable()
-                            .message(1, " VO should be immutable.")
-                            .message(2, "_CLASS_ should be immutable.")
+                            .message(0, " VO should be immutable.")
+                            .message(1, "_CLASS_ should be immutable.")
                         .test("VOImmutable", "VOTest"));
     }
     @Test
@@ -113,8 +113,8 @@ public class DivekitHelperCodeBuilderTest {
         assertEquals(true,
                 classes("thkoeln.mockData")
                         .stackTrace()
-                            .message(1,"The stacktrace in Test: _TEST_  contains your own class, please take a closer look.")
-                            .message(2, "This line of the stacktrace in Test: _TEST_ contains your own Class maybe take a look there:\n _LINE_" )
+                            .message(0,"The stacktrace in Test: _TEST_  contains your own class, please take a closer look.")
+                            .message(1, "This line of the stacktrace in Test: _TEST_ contains your own Class maybe take a look there:\n _LINE_" )
                         .test("StacktraceTip", "StacktraceTest"));
     }
 }

@@ -5,11 +5,10 @@
   - [Tabellentests](#tabellentest)
   - [Klassendiagrammtest](#klassendiagrammtest)
   - [Codetests](#codetest)
+  - [TestLevel](#testlevel)
   - [Beispiele](#beispiele)
 - [Divekit-Helper Aufbau](#divekit-helper-aufbau)
-- [Implementations-Hinweise](#implementations-hinweise)
-  - [Aktueller Stand & notwendige Implementierungen](#aktueller-stand--notwendige-implementierungen)
-  - [Integration](#integration)
+- [Integration](#integration)
 
 ---
 
@@ -253,11 +252,56 @@ Für den "stacktrace"-Test werden die vom SurefireReports generierten xml-Datier
 
 ---
 
+## TestLevel
+
+Das TestLevel versucht grob zu bestimmen, ob eine Person schwierigkeiten mit einer Aufgabe hat. Hierbei gibt ein erhöhtes Level mehr Schwierigkeiten an.
+
+Hierfür werden die Commits, Pushes betrachtet. Insbesondere werden sich die Commits angeschaut, welche eine Datei eines Testes modifizieren.
+Sollte nun eine bestimmte Zeitspanne zwischen zwei Commits vergangen sein, welche Dateien derselben Aufgabe bearbeiten, so wird davon ausgegangen,
+dass die Person an dieser Aufgabe festhängt und das TestLevel dieses Tests wird erhöht.
+
+Jedoch kann Level kann sich pro Push-Vorgang nur um eins erhöhen, da das TestLevel das Feedback der GitHub-Pages Seite beeinflusst und dies nur durch einen Push und nicht durch einen Commit aktualisiert wird.
+Hierdurch soll verhindert werden, dass TestLevel übersprungen werden und das Feedback eines Levels nicht gelesen wurde.
+
+Die TestLevel lassen sich über die [TestLevel](src/main/java/thkoeln/divekithelper/common/testlevel/TestLevel.java) generieren.
+Hierzu muss eine Konfigurations-Datei im JSON-Format erstellt werden, welche folgenden Informationen enthält:
+
+*Hinweis:* default = Diese Werte werden in den Tests übernommen, wenn sie nicht explizit angegeben sind
+- defaultDelay : Anzahl der Minuten zwischen zwei Commits, bis das testLevel erhöht wird.
+- defaultMaxLevel : Anzahl der Level die maximal erreicht werden kann.
+- tests : List von **Tests** (Ein Test muss einen testName, und path haben. Zusätzlich können noch Test spezifische delay und maxLevel angeben werden.)
+  - testName : Name dieses Tests, um das TestLevel einem Test beim Benutzen der DSL zuzuordnen. Der testName muss einem der beiden Parameter der *test( TESTNAME, TESTKATEGORIENAME )* Methode entsprechen. Hierbei wird der *TESTNAME* priorisiert, sollte kein Level zu diesem gefunden werden, wird nach einem Level zu dem *TESTKATEGORIENAME* gesucht.
+  - path : Dateipfad zu dem Ordner oder der Datei, welche dem Test enspricht.
+  - delay : Anzahl der Minuten zwischen zwei Commits, bis das testLevel erhöht wird.
+  - maxLevel : Anzahl der Level die maximal erreicht werden kann.
+
+Ein Beispiel einer Konfigurations-Datei wäre:
+``` 
+{
+  "defaultDelay":15,
+  "defaultMaxLevel": 10,
+    {"testName":"E1","path":"src/main/resources/E1.md","delay":20,"maxLevel": 3},
+    {"testName":"E2","path":"src/main/resources/E2.md","delay":20},
+    {"testName":"E3","path":"src/main/java/thkoeln/st/st2praktikum/E3"},
+    {"testName":"E3b","path":"src/main/java/thkoeln/st/st2praktikum/E3/E3b.java","delay":10},
+    {"testName":"E4","path":"src/main/java/thkoeln/st/st2praktikum/E4.java","delay":10}]
+}
+```
+
+Wenn man diese Datei beispielsweise im Hauptverzeichnis als `testLevelConfig.json"` speichert, lassen sich die TestLevel über folgenden Befehl generieren:
+`TestLevel.generateTestLevel("testLevelConfig.json")`
+
+Dieser Befehl muss einmal vor dem Ausführen der DSL bzw. dem Nutzen der TestLevel ausgeführt werden.
+Sollte dies nicht geschehen oder es Probleme beim Generieren der Level geben, so werden die Tests standardmäßig mit einem TestLevel von 0 ausgeführt.
+
+---
+
 ## Beispiele
 
 Für einen Überblick über die Einsatzmöglichkeiten der DSL gibt es Beispiele zu allen 3 Test-Kategorien:
 
-[Tabellen-Beispieltests](src/test/java/thkoeln/divekithelper/table/DivekitHelperTableBuilderTest.java)
+[Tabellen-Beispieltests](src/test/java/thkoeln/divekithelper/table/DivekitHelperTa
+"tests": [bleBuilderTest.java)
 
 [Klassendiagramm-Beispieltests](src/test/java/thkoeln/divekithelper/classDiagram/DivekitHelperClassDiagramBuilderTest.java)
 
@@ -289,29 +333,13 @@ Der Code-Test hat keine eigne Parser oder Test-Klasse sondern führt die Tests d
 
 Zuletzt gibt es noch einen [Mock-Ordner](src/main/java/thkoeln/divekithelper/mock), welcher zum Testen der DSL dient.
 Hierfür stellt er folgende Dateien zur verfügung:
-- [Implementation](src/main/java/thkoeln/divekithelper/mock/implementations) mit einer Beispiel-Implementation der CommitFrequency-Klasse.
 - [Repository](src/main/java/thkoeln/divekithelper/mock/repo) mit einem Repository, um den Code-Test testen zu können.
 - [Tabellen](src/main/java/thkoeln/divekithelper/mock/tables) mit Tabellen, um den Tabellen-Test testen zu können.
 - [Diagramme](src/main/java/thkoeln/divekithelper/mock/diagrams) mit Klassen-Diagrammen, um den Klassendiagramm-Test testen zu können.
 
 ---
 
-# Implementations-Hinweise
-
-## Aktueller Stand & notwendige Implementierungen
-
-
-Das Bestimmen der [Test-Level](src/main/java/thkoeln/divekithelper/common/CommitFrequencyInterface.java) ist noch nicht implementiert. Es ist geplant, dies in einem weiterführenden Projekt zu ergänzen.
-
-Der Helper kann jedoch auch schon ohne ein dynamisches Test-Level benutzt werden. Hierzu kann man das Test-Level statisch auf z.B. 1 festlegen und die Tests ausführen. 
-Dies ermöglicht aber nur ein statisches Feedback.
-
-Die momentane Beispiel-Commit-Frequency-Klasse arbeitet mit einer lokalen Datei, welche bei jedem Push auf das Repo in der Pipeline verändert wird. Diese Implementierung dient nur demonstrationszwecken und berücksichtigt nicht, welche Aufgaben bearbeitet wurden, sondern erhöht das Level eines Tests bei jedem Aufruf.
-Bei einer richtigen Implementierung sollten die bearbeite Aufgaben jedoch eine Rolle spielen. Außerdem sollte das Speichern der Level nicht über ein Push aus der Pipeline funktionieren, sondern beispielsweise über Caching oder einen Server auf den der Gitlab-Runner zugriff hat.
-
----
-
-## Integration
+# Integration
 *Hinweis:* In fertiger Version ist geplannt den Helper mittels JitPack einfacher installieren zu können.
 
 
@@ -324,7 +352,7 @@ Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werd
     - mvn install:install-file -Dfile=divekit-helper.jar -DgroupId=thkoeln -DartifactId=divekit-helper -Dversion=1.0 -Dpackaging=jar # install Divekit-Helper
     - mvn pmd:pmd  # buildcleancodereport
     - mvn verify -fn # Always return status code 0 => Continue with the next stage
-    - mvn compile exec:java # run DivekitHelper
+    - mvn compile exec:java || true # run DivekitHelper
     - mv target/pmd.net.sourceforge.pmd.renderers.JsonRendererten target/Test.pmd.json
     - chmod ugo+x ./divekit-rv
     - ./divekit-rv target/Test.pmd.json target/surefire-reports/TEST-*.xml DivekitHelperResult.custom-test.json
@@ -363,20 +391,5 @@ Ausführen (in diesem Beispiel befinden sich die Divekit-Helper Befehle in der K
 		  <classpathScope>test</classpathScope>
 		</configuration>
 	</plugin>
-```
-
-*Hinweis:* Die Folgende MockCommitFrequency Implementierung dient nur Demonstrationszwecken und kann bei einer statischen Test-Level benutzung weggelassen werden.
-
-
-Die momentane MockCommitFrequency-Klasse speichert das Test-Level, indem sie in der Piepline einen Push durchführt, dies sollte in der fertigen Version eleganter z.B. durch Caching oder einen Server gelöst werden.
-Da diese Version jedoch mit einem Push arbeitet, benötigt sie einen Project Access Token und folgendes CI/CD-Skript nach dem Ausführen des Helpers:
-```
-    - git config user.name "ci-pipeline"  #commit studentTestLevel changes
-    - git config user.email "ci-pipeline@example.com"
-    - git remote remove project ||true # true => continues if remote doesn't exists
-    - git remote add project https://oauth2:$ACCESS_TOKEN@git.st.archi-lab.io/$CI_PROJECT_PATH.git
-    - git add src/test/resources/studentTestLevel.json
-    - git commit -m "update studentTestLevel"
-    - git push project HEAD:master -o ci.skip #ci.skip => prevents trigger of pipeline script
 ```
 
