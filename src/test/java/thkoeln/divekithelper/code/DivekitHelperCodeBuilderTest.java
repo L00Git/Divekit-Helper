@@ -15,11 +15,6 @@ public class DivekitHelperCodeBuilderTest {
 
 
     @Test
-    void test(){
-        classes( "thkoeln.divekithelper.mock.repo" )
-                .withName("ConnectionRepository");
-    }
-    @Test
     void isAnnotationPresent()  {
         assertEquals(true,
                 classes( "thkoeln.divekithelper.mock.repo" )

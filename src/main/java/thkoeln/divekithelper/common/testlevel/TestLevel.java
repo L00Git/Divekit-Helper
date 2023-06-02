@@ -31,7 +31,7 @@ public class TestLevel {
      * @param pathConfig path to the testLevelConfiguration
      */
     public static void generateTestLevel( String pathConfig ){
-        HashMap<String, Integer> testLevel = new HashMap<String, Integer>();
+        HashMap<String, Integer> testLevel = new HashMap<>();
 
         String projectAccessToken = System.getenv("CODE_REPO_TOKEN");
 
@@ -76,14 +76,15 @@ public class TestLevel {
         if( !testConfig( testLevelConfig ) ){
             return;
         }
-        try {
-            GitLabApi gitLabApi = new GitLabApi(hostUrl, projectAccessToken);
+        try ( GitLabApi gitLabApi = new GitLabApi(hostUrl, projectAccessToken) ) {
+
             gitLabApi.setDefaultPerPage(100);
 
 
             List<Event> pushEvents = gitLabApi.getEventsApi().getProjectEvents( projectPath, Constants.ActionType.PUSHED, null, null, null, null );
 
 
+            assert testLevelConfig != null;
             for ( Test test: testLevelConfig.getTests() ){
                 List<Commit> commits = gitLabApi.getCommitsApi().getCommits( projectPath, null, test.getPath() );
                 int delay = test.getDelay() > 0 ? test.getDelay() : testLevelConfig.getDefaultDelay();
@@ -202,7 +203,7 @@ public class TestLevel {
      * @return the TestLevel
      */
     public static int getTestLevel( String testName, String testCategory ){
-        HashMap<String, Double> testLevel = new HashMap<String, Double>();
+        HashMap<String, Double> testLevel = new HashMap<>();
         Gson gson = new Gson();
 
         try (FileReader fileReader = new FileReader( TEST_LEVEL_OUTPUT_PATH ) ){

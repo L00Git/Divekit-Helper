@@ -344,12 +344,12 @@ Hierfür stellt er folgende Dateien zur verfügung:
 
 
 Zuerst sollte man aus dem Divekit-Helper eine Jar builden und sie dem Projekt hinzufügen.
-Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen.
+Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen ( das org.slf4j:slf4j-simple Modul ist für diese Dopplung verantwortlich).
 
 Dann kann man diese Jar als Dependency installieren.
 Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werden, da der Surefire-Test vom Helper genutzt wird.
 ```
-    - mvn install:install-file -Dfile=divekit-helper.jar -DgroupId=thkoeln -DartifactId=divekit-helper -Dversion=1.0 -Dpackaging=jar # install Divekit-Helper
+    - mvn install:install-file -Dfile=divekit-helper.jar -DgroupId=thkoeln -DartifactId=divekit-helper -Dversion=1.0.4 -Dpackaging=jar # install Divekit-Helper
     - mvn pmd:pmd  # buildcleancodereport
     - mvn verify -fn # Always return status code 0 => Continue with the next stage
     - mvn compile exec:java || true # run DivekitHelper
@@ -363,7 +363,7 @@ Außerdem muss der Divekit-Helper als Dependency der `pom.xml` hinzugefügt werd
 	<dependency>
 		<groupId>thkoeln</groupId>
 		<artifactId>divekit-helper</artifactId>
-		<version>1.0</version>
+		<version>1.0.4</version>
 	</dependency>
 ```
 

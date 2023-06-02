@@ -27,7 +27,7 @@ class DivekitHelperTableBuilderTest {
 
 
     @Test
-    void testLevelGeneraitonTest() {
+    void testLevelGenerationTest() {
         TestLevel.generateTestLevel("testLevelConfig.json");
         System.out.println( TestLevel.getTestLevel("E3b","E3") );
     }
