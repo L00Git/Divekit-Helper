@@ -300,8 +300,7 @@ Sollte dies nicht geschehen oder es Probleme beim Generieren der Level geben, so
 
 Für einen Überblick über die Einsatzmöglichkeiten der DSL gibt es Beispiele zu allen 3 Test-Kategorien:
 
-[Tabellen-Beispieltests](src/test/java/thkoeln/divekithelper/table/DivekitHelperTa
-"tests": [bleBuilderTest.java)
+[Tabellen-Beispieltests](src/test/java/thkoeln/divekithelper/table/DivekitHelperTableBuilderTest.java)
 
 [Klassendiagramm-Beispieltests](src/test/java/thkoeln/divekithelper/classDiagram/DivekitHelperClassDiagramBuilderTest.java)
 
@@ -319,7 +318,7 @@ Der [common](src/main/java/thkoeln/divekithelper/common)-Ordner enthält die all
 Diese allgemeinen Klassen bestehen aus:
 - [DivekitHelper](src/main/java/thkoeln/divekithelper/common/DivekitHelper.java): Implementiert die Methoden, die von allen drei Spezialisierungen genutzt werden.
 - [JSONHelper](src/main/java/thkoeln/divekithelper/common/JSONHelper.java): Ermöglicht das Generieren und Speichern der Testergebnisse, in einem vom Divekit-Report-Visualizer kompatiblen Format.
-- [CommitFrequencyInterface](src/main/java/thkoeln/divekithelper/common/CommitFrequencyInterface.java): Definiert die Funktionalität, welche eine Commit-Frequency-Klasse aufweisen muss. Diese Klasse ist für das Test-Level verantwortlich.
+- [TestLevel](src/main/java/thkoeln/divekithelper/common/testlevel): In diesen Ordner liegen alle Klassen, welche für das Bestimmen des TestLevels verantwortlich sind.
 
 Die drei Spezialisierungen bestehen aus den Testarten: [Tabellen-Tests](src/main/java/thkoeln/divekithelper/table), [Klassendiagramm-Tests](src/main/java/thkoeln/divekithelper/classDiagram) und [Code-Tests](src/main/java/thkoeln/divekithelper/code).
 Alle drei sind nach derselben Struktur aufgebaut:
@@ -329,13 +328,15 @@ Alle drei sind nach derselben Struktur aufgebaut:
 
 Des Weiteren haben die Tabellen- und Klassendiagramm-Tests eigene Parser, welche das Auslesen der UMLet und Markdown Dateien übernehmen, sowie Test Klassen welche die Tests auf den durch das Auslesen generierten Java-Klassen ausführen.
 
-Der Code-Test hat keine eigne Parser oder Test-Klasse sondern führt die Tests direkt in der Hauptklasse mittels Reflection aus.
+Der Code-Test hat keinen eignen Parser oder Test-Klasse, sondern führt die Tests direkt in der Hauptklasse mittels Reflection aus.
 
 Zuletzt gibt es noch einen [Mock-Ordner](src/main/java/thkoeln/divekithelper/mock), welcher zum Testen der DSL dient.
 Hierfür stellt er folgende Dateien zur verfügung:
 - [Repository](src/main/java/thkoeln/divekithelper/mock/repo) mit einem Repository, um den Code-Test testen zu können.
 - [Tabellen](src/main/java/thkoeln/divekithelper/mock/tables) mit Tabellen, um den Tabellen-Test testen zu können.
 - [Diagramme](src/main/java/thkoeln/divekithelper/mock/diagrams) mit Klassen-Diagrammen, um den Klassendiagramm-Test testen zu können.
+
+
 
 ---
 
