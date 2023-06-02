@@ -98,7 +98,7 @@ public class TestLevel {
             exception.printStackTrace();
         }
 
-        System.out.println( testLevel );
+        System.out.println( "Generated Test Level: " + testLevel );
 
         try (FileWriter fileWriter = new FileWriter( TEST_LEVEL_OUTPUT_PATH ) ){
             gson.toJson( testLevel, fileWriter );

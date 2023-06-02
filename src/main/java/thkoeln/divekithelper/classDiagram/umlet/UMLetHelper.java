@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.*;
 
 /**
- * This Class generates a Java-Representation of a UMLet-files.
+ * This Class generates a Java-Representation of a UMLet-Files.
  */
 public class UMLetHelper {
     @Getter

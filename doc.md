@@ -82,7 +82,7 @@ Hierbei müsste "Tabelleninhalt 1" und "Tabelleninhalt A" immer in derselben Zei
 
 ***rowMismatch()***
 - **Funktionalität:** Testet, ob alle Elemente, welche in derselben Zeile in der Lösung stehen, auch in derselben Zeile in der Nutzer-Tabelle stehen, hierbei ist die Rheinfolge der Zeilen egal.
-Hierfür muss zuvor eine Zeile festgelegt worden sein, welche eindeutige Werte enthält.
+Hierfür muss zuvor eine Spalte festgelegt worden sein, welche eindeutige Werte enthält.
 - **Platzhalter:** `_ELEMENT_`= Hiermit lassen sich falsche Elemente ausgeben.
 
 ***missing()***
@@ -288,7 +288,7 @@ Ein Beispiel einer Konfigurations-Datei wäre:
 }
 ```
 
-Wenn man diese Datei beispielsweise im Hauptverzeichnis als `testLevelConfig.json"` speichert, lassen sich die TestLevel über folgenden Befehl generieren:
+Wenn man diese Datei beispielsweise im Hauptverzeichnis als `testLevelConfig.json` speichert, lassen sich die TestLevel über folgenden Befehl generieren:
 `TestLevel.generateTestLevel("testLevelConfig.json")`
 
 Dieser Befehl muss einmal vor dem Ausführen der DSL bzw. dem Nutzen der TestLevel ausgeführt werden.
@@ -341,31 +341,20 @@ Hierfür stellt er folgende Dateien zur verfügung:
 ---
 
 # Integration
-*Hinweis:* In fertiger Version ist geplannt den Helper mittels JitPack einfacher installieren zu können.
 
-
-Zuerst sollte man aus dem Divekit-Helper eine Jar builden und sie dem Projekt hinzufügen.
-Wenn es Probleme mit SLF4J-Dependencies-Dopplungen gibt, kann man die SLF4J Dependency des Divekit-Helpers ausschließen ( das org.slf4j:slf4j-simple Modul ist für diese Dopplung verantwortlich).
-
-Dann kann man diese Jar als Dependency installieren.
-Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werden, da der Surefire-Test vom Helper genutzt wird.
-```
-    - mvn install:install-file -Dfile=divekit-helper.jar -DgroupId=thkoeln -DartifactId=divekit-helper -Dversion=1.0.4 -Dpackaging=jar # install Divekit-Helper
-    - mvn pmd:pmd  # buildcleancodereport
-    - mvn verify -fn # Always return status code 0 => Continue with the next stage
-    - mvn compile exec:java || true # run DivekitHelper
-    - mv target/pmd.net.sourceforge.pmd.renderers.JsonRendererten target/Test.pmd.json
-    - chmod ugo+x ./divekit-rv
-    - ./divekit-rv target/Test.pmd.json target/surefire-reports/TEST-*.xml DivekitHelperResult.custom-test.json
-```
-
-Außerdem muss der Divekit-Helper als Dependency der `pom.xml` hinzugefügt werden:
+Der Divekit-Helper muss als Dependency der `pom.xml` hinzugefügt werden (sollte es schon ein SLF4J Binding geben, kann die betroffene Dependency ausgeschlossen werden):
 ``` 
-	<dependency>
-		<groupId>thkoeln</groupId>
-		<artifactId>divekit-helper</artifactId>
-		<version>1.0.4</version>
-	</dependency>
+		<dependency>
+			<groupId>com.github.L00Git</groupId>
+			<artifactId>divekit-helper</artifactId>
+			<version>1.0.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 ```
 
 Folgende Befehle sollten im Build teil der `pom.xml` stehen, damit die Stacktraces erhalten bleiben und der Helper ausgeführt wird:
@@ -394,3 +383,12 @@ Ausführen (in diesem Beispiel befinden sich die Divekit-Helper Befehle in der K
 	</plugin>
 ```
 
+Im CI/CD-Skript sollte der Surefire-Test vor dem Divekit-Helper ausgeführt werden, da der Surefire-Test vom Helper genutzt wird.
+```
+    - mvn exec:java || true # run DivekitHelper
+```
+
+Beim Aufrufen des report-visualizers, muss der Report als Parameter angegeben werden.
+```
+    - ./divekit-rv target/Test.pmd.json target/surefire-reports/TEST-*.xml DivekitHelperResult.custom-test.json
+```
