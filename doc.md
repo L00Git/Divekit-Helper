@@ -44,6 +44,11 @@ Im Tabellentest werden Markdown-Dateien eingelesen. Diese müssen dem folgenden 
 
 Man gibt dem Test zwei Dateien an, die Tabelle der Studenten und die Lösungs-Tabelle.
 
+Dem Tabellentest wird in der ersten Methode eine Tabellen-Test-Klasse übergeben.
+Diese Tabellen-Test-Klasse benötigt die Pfade zu der Tabelle der Studenten und der Lösungs-Tabelle.
+Zusätzlich kann eine Liste von Spalten über ihre Nummer als case-sensitive definiert werden (beginnend bei Null).
+Alle nicht definierten Spalten sind standardmäßig case-insensitive.
+
 Im Tabellentest lassen sich Spalten über ihren Spaltennamen oder ihre Nummer (bei 0 beginnend) ansprechen.
 In der Ausgabe lässt sich der durch den Test betroffene Tabelleninhalt durch `_ELEMENT_` ausgeben, sofern dies vom ausgeführten Test unterstützt wird.
 Auf die gleiche Weise lassen sich die Spaltennamen mittels `_COLUMN1_` oder `_COLUMN2_` in den davon unterstützten Tests ausgeben.
@@ -347,7 +352,7 @@ Der Divekit-Helper muss als Dependency der `pom.xml` hinzugefügt werden (sollte
 		<dependency>
 			<groupId>com.github.L00Git</groupId>
 			<artifactId>divekit-helper</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>

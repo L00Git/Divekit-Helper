@@ -29,12 +29,10 @@ class DivekitHelperTableBuilderTest {
     @Test
     void testLevelGenerationTest() {
         TestLevel.generateTestLevel("testLevelConfig.json");
-        System.out.println( TestLevel.getTestLevel("E3b","E3") );
     }
 
     @Test
     void e1aTest(){
-
         assertEquals(false,
                 table( new TableTest( e1a, e1aSolution ) )
                         .column(0)

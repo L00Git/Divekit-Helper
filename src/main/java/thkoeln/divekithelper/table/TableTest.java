@@ -3,6 +3,7 @@ package thkoeln.divekithelper.table;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A Class that implements table tests.
@@ -13,6 +14,8 @@ public class TableTest {
     private MarkdownTable userTable;
 
     private MarkdownTable solutionTable;
+
+    private List<Integer> caseSensitiveColumns = new ArrayList<>();
 
     @Getter
     private boolean testValid;
@@ -25,6 +28,20 @@ public class TableTest {
     public TableTest( String userTablePath, String solutionTablePath ) {
         userTable = MarkdownTableHelper.loadTable(userTablePath, false);
         solutionTable = MarkdownTableHelper.loadTable(solutionTablePath, true);
+
+        testValid = userTable.isValid() && solutionTable.isValid() && MarkdownTableHelper.areTablesComparable( userTable, solutionTable );
+    }
+
+    /**
+     * Create a table test on two given tables.
+     * @param userTablePath path to the user table
+     * @param solutionTablePath path to the solution table
+     * @param caseSensitiveColumns List of call Columns that should be case-sensitive
+     */
+    public TableTest( String userTablePath, String solutionTablePath, List<Integer> caseSensitiveColumns ) {
+        userTable = MarkdownTableHelper.loadTable(userTablePath, false);
+        solutionTable = MarkdownTableHelper.loadTable(solutionTablePath, true);
+        this.caseSensitiveColumns = caseSensitiveColumns;
 
         testValid = userTable.isValid() && solutionTable.isValid() && MarkdownTableHelper.areTablesComparable( userTable, solutionTable );
     }
@@ -72,7 +89,7 @@ public class TableTest {
     public List<String> getMissingInColumn( int column ){
         if( solutionTable.getPlaceholderColumns().contains( column ) )
             return new ArrayList<>();
-        return arrayDifference(getColumn( solutionTable.getContent(), column ), getColumn( userTable.getContent(), column ));
+        return arrayDifference( getColumn( solutionTable.getContent(), column ), getColumn( userTable.getContent(), column ), caseSensitiveColumns.contains( column ) );
     }
 
     /**
@@ -83,7 +100,7 @@ public class TableTest {
     public List<String> getTooManyInColumn( int column ){
         if( solutionTable.getPlaceholderColumns().contains( column ) )
             return new ArrayList<>();
-        return arrayDifference(getColumn( userTable.getContent(), column), getColumn(solutionTable.getContent(), column) );
+        return arrayDifference(getColumn( userTable.getContent(), column), getColumn(solutionTable.getContent(), column), caseSensitiveColumns.contains( column ) );
     }
 
     /**
@@ -155,22 +172,27 @@ public class TableTest {
      * @return all elements that are in the actual column but should be in the expected column
      */
     public List<String> getWrongColumn( int expectedColumn, int actualColumn ){
-
         HashSet<String> expected = new HashSet<>();
 
-        for (String element: getColumn( solutionTable.getContent(), expectedColumn )){
-            expected.addAll( Arrays.asList( element.split("\\s*,\\s*") ) );
+        for (String cell: getColumn( solutionTable.getContent(), expectedColumn )){
+            List<String> elements = Arrays.asList( cell.split("\\s*,\\s*") );
+            if( !caseSensitiveColumns.contains( expectedColumn ) ){
+                elements = elements.stream().map( String::toLowerCase ).collect(Collectors.toList());
+            }
+            expected.addAll( elements );
         }
 
         ArrayList<String> actual = new ArrayList<>();
 
-        for (String element: getColumn( userTable.getContent(), actualColumn )){
-            actual.addAll( Arrays.asList( element.split("\\s*,\\s*") ) );
+        for (String cell: getColumn( userTable.getContent(), actualColumn )){
+            List<String> elements = Arrays.asList( cell.split("\\s*,\\s*") );
+            if( !caseSensitiveColumns.contains( expectedColumn ) ){
+                elements = elements.stream().map( String::toLowerCase ).collect(Collectors.toList());
+            }
+            actual.addAll( elements );
         }
 
-
         expected.retainAll( actual );
-
 
         return new ArrayList<>(expected);
     }
@@ -185,14 +207,22 @@ public class TableTest {
 
         HashSet<String> expected = new HashSet<>();
 
-        for (String element: getColumn( solutionTable.getContent(), expectedColumn )){
-            expected.addAll( Arrays.asList( element.split("\\s*,\\s*") ) );
+        for (String cell: getColumn( solutionTable.getContent(), expectedColumn ) ){
+            List<String> elements = Arrays.asList( cell.split("\\s*,\\s*") );
+            if( !caseSensitiveColumns.contains( expectedColumn ) ){
+                elements = elements.stream().map( String::toLowerCase ).collect(Collectors.toList());
+            }
+            expected.addAll( elements );
         }
 
         ArrayList<String> actual = new ArrayList<>();
 
-        for (String element: getColumn( userTable.getContent(), actualColumn )){
-            actual.addAll( Arrays.asList( element.split("\\s*,\\s*") ) );
+        for (String cell: getColumn( userTable.getContent(), actualColumn ) ){
+            List<String> elements = Arrays.asList( cell.split("\\s*,\\s*") );
+            if( !caseSensitiveColumns.contains( expectedColumn ) ){
+                elements = elements.stream().map( String::toLowerCase ).collect(Collectors.toList());
+            }
+            actual.addAll( elements );
         }
 
         expected.retainAll( actual );
@@ -221,13 +251,13 @@ public class TableTest {
 
         for (int row = 0; row < userTable.getContent().length; row++) {
             int finalRow = row;
-            Optional<String[]> matchingSolutionRow = Arrays.stream( solutionTable.getContent() ).filter(solutionRow ->  areCellsEqual( userTable.getContent()[finalRow][idColumn], solutionRow[idColumn])  ).findFirst();
+            Optional<String[]> matchingSolutionRow = Arrays.stream( solutionTable.getContent() ).filter(solutionRow ->  areCellsEqual( userTable.getContent()[finalRow][idColumn], solutionRow[idColumn], caseSensitiveColumns.contains( idColumn )  ) ).findFirst();
 
             if ( matchingSolutionRow.isPresent() )  {
                 for( int column = 0; column < matchingSolutionRow.get().length; column++ ) {
                     if( solutionTable.getPlaceholderColumns().contains( column ) )
                         continue;
-                    if( !areCellsEqual( userTable.getContent()[row][column], matchingSolutionRow.get()[column] ) )
+                    if( !areCellsEqual( userTable.getContent()[row][column], matchingSolutionRow.get()[column], caseSensitiveColumns.contains( column ) ) )
                         rowMismatches.add(new int[]{row, column});
                 }
             }
@@ -244,13 +274,13 @@ public class TableTest {
     public List<String> getRowMismatchesInRow( int idColumn, int row ){
         ArrayList<String> rowMismatchElements = new ArrayList<>();
 
-        Optional<String[]> matchingSolutionRow = Arrays.stream( solutionTable.getContent() ).filter(solutionRow ->  areCellsEqual( userTable.getContent()[row][idColumn], solutionRow[idColumn] ) ).findFirst();
+        Optional<String[]> matchingSolutionRow = Arrays.stream( solutionTable.getContent() ).filter(solutionRow ->  areCellsEqual( userTable.getContent()[row][idColumn], solutionRow[idColumn], caseSensitiveColumns.contains( idColumn ) ) ).findFirst();
 
         if ( matchingSolutionRow.isPresent() )  {
             for( int column = 0; column < matchingSolutionRow.get().length; column++ ) {
                 if( solutionTable.getPlaceholderColumns().contains( column ) )
                     continue;
-                if( !areCellsEqual( userTable.getContent()[row][column], matchingSolutionRow.get()[column] ) )
+                if( !areCellsEqual( userTable.getContent()[row][column], matchingSolutionRow.get()[column], caseSensitiveColumns.contains( column ) ) )
                     rowMismatchElements.add( userTable.getContent()[row][column] );
             }
         }
@@ -271,7 +301,7 @@ public class TableTest {
             for (int column = 0; column < userTable.getContent()[row].length; column++) {
                 if( solutionTable.getPlaceholderColumns().contains( column ) )
                     continue;
-                if ( ( userTable.getContent().length >= row +1) && !areCellsEqual( userTable.getContent()[row][column], solutionTable.getContent()[row][column] ) )  {
+                if ( ( userTable.getContent().length >= row +1) && !areCellsEqual( userTable.getContent()[row][column], solutionTable.getContent()[row][column], caseSensitiveColumns.contains( column ) ) )  {
                     mismatches.add(new int[]{ row, column});
                 }
             }
@@ -294,7 +324,7 @@ public class TableTest {
         for(int column = 0; column < tableRow.length; column++){
             if( solutionTable.getPlaceholderColumns().contains( column ) )
                 continue;
-            if( ( userTable.getContent().length >= row +1) && !areCellsEqual( tableRow[column], solutionRow[column] ) )
+            if( ( userTable.getContent().length >= row +1) && !areCellsEqual( tableRow[column], solutionRow[column], caseSensitiveColumns.contains( column ) ) )
                 mismatchElements.add( tableRow[column] );
         }
         return mismatchElements;
@@ -314,11 +344,17 @@ public class TableTest {
      * Tests, whether two table cells are equal. The cells can contain lists separated by ','.
      * @param cell1 first cell
      * @param cell2 second cell
+     * @param caseSensitive  whether this test should be case-sensitive
      * @return true if the cells are equal
      */
-    private boolean areCellsEqual( String cell1, String cell2 ){
+    private boolean areCellsEqual( String cell1, String cell2, boolean caseSensitive ){
         ArrayList<String> splitCell1 = new ArrayList<>(Arrays.asList(cell1.split("\\s*,\\s*")));
         ArrayList<String> splitCell2 = new ArrayList<>(Arrays.asList(cell2.split("\\s*,\\s*")));
+
+        if( !caseSensitive ){
+            splitCell1 = splitCell1.stream().map( String::toLowerCase ).collect( Collectors.toCollection( ArrayList::new ) );
+            splitCell2 = splitCell2.stream().map( String::toLowerCase ).collect( Collectors.toCollection( ArrayList::new ) );
+        }
 
         if( splitCell1.size() != splitCell2.size() )
             return false;
@@ -333,18 +369,25 @@ public class TableTest {
      * Get the difference of two arrays by removing all elements of an array from the other and treating every element as table cells.
      * @param ar1 first array of cells
      * @param ar2 second array of cells
+     * @param caseSensitive whether this test should be case-sensitive
      * @return the difference
      */
-    private List<String> arrayDifference( String[] ar1, String[] ar2){
+    private List<String> arrayDifference( String[] ar1, String[] ar2, boolean caseSensitive ){
         ArrayList<String> difference = new ArrayList<>( );
 
-
         for(String cell: ar1){
-            difference.addAll( Arrays.asList( cell.split("\\s*,\\s*") ) );
+            List<String> elements = Arrays.asList( cell.split("\\s*,\\s*") );
+            if( !caseSensitive ){
+                elements = elements.stream().map( String::toLowerCase ).collect(Collectors.toList());
+            }
+            difference.addAll( elements );
         }
 
         for (String cell: ar2){
             for(String element:  cell.split("\\s*,\\s*") ) {
+                if( !caseSensitive ){
+                    element = element.toLowerCase();
+                }
                 difference.remove( element );
             }
         }
