@@ -169,12 +169,14 @@ class DivekitHelperTableBuilderTest {
     @Test
     void e3aTest(){
         assertEquals(true,
+
                 table( new TableTest( e3a, e3aSolution ) )
                         .column(0)
                         .rowMismatch()
                             .message(0,"An Element in this row is not matching the solution.")
                             .message(1,"_ELEMENT_ is not matching the solution.")
                         .test("E3a","TableTests")
+
         );
 
     }
@@ -185,8 +187,8 @@ class DivekitHelperTableBuilderTest {
                 table( new TableTest( e3a2, e3a2Solution ) )
                         .column(0)
                         .rowMismatch()
-                            .message(0,"An Element in this row is not matching the solution.")
-                            .message(1,"_ELEMENT_ is not matching the solution.")
+                            //.message(0,"An Element in this row is not matching the solution.")
+                            .message(0,"_ELEMENT_ is not matching the solution.")
                         .test("E3a2","TableTests")
         );
     }

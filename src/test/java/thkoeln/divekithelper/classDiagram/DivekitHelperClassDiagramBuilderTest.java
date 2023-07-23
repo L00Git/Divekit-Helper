@@ -115,8 +115,12 @@ public class DivekitHelperClassDiagramBuilderTest {
 
     @Test
     void eo02FinalFailing(){
+
+        String e02 = "src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalModifiedFailing.uxf";
+        String e02Solution = "src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalSolution.uxf";
+
         assertEquals(false,
-                classDiagram( new ClassDiagramTest("src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalModifiedFailing.uxf", "src/main/java/thkoeln/divekithelper/mock/diagrams/E02FinalSolution.uxf") )
+                classDiagram( new ClassDiagramTest( e02, e02Solution) )
                         .missingClasses()
                             .message(0, "A Class is missing.")
                             .message(1, "_CLASS_ is missing.")

@@ -169,7 +169,7 @@ public class DivekitHelperCode extends DivekitHelper {
 
 
         for (Class<?> aClass : classesToTest) {
-            if( aClass.isAnnotationPresent( annotation ) || Arrays.stream( aClass.getDeclaredFields()).anyMatch( field -> field.isAnnotationPresent(annotation ) ) ){
+            if( aClass.isAnnotationPresent( annotation ) || Arrays.stream( aClass.getDeclaredFields()).anyMatch( field -> field.isAnnotationPresent( annotation ) ) ){
                 annotationPresent = true;
                 foundClasses.add( aClass.getSimpleName() );
             }

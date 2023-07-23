@@ -57,7 +57,7 @@ public class DivekitHelperCodeBuilderTest {
                         .otherClass( "_CLASS_Repository" )
                             .message(0, "You are missing a Repository.")
                             .message(1, "Entities should have Repositories.")
-                            .message(1, "_CLASS_ is missing a Repository.")
+                            .message(2, "_CLASS_ is missing a Repository.")
                         .test("EntityRepo", "AnnotationTest"));
     }
 

@@ -46,7 +46,8 @@ Man gibt dem Test zwei Dateien an, die Tabelle der Studenten und die Lösungs-Ta
 
 Dem Tabellentest wird in der ersten Methode eine Tabellen-Test-Klasse übergeben.
 Diese Tabellen-Test-Klasse benötigt die Pfade zu der Tabelle der Studenten und der Lösungs-Tabelle.
-Zusätzlich kann eine Liste von Spalten über ihre Nummer als case-sensitive definiert werden (beginnend bei Null).
+Zusätzlich kann optional eine Liste von Spalten über ihre Nummer als case-sensitive definiert werden (beginnend bei Null).
+Diese Liste von Spalten wird bei der Erstellung der Tabellen-Test-Klasse als Parameter angegeben.
 Alle nicht definierten Spalten sind standardmäßig case-insensitive.
 
 Im Tabellentest lassen sich Spalten über ihren Spaltennamen oder ihre Nummer (bei 0 beginnend) ansprechen.

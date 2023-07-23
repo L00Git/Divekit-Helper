@@ -18,5 +18,4 @@ public class Room {
     @Id
     private UUID id = UUID.randomUUID();
 
-    //private Connection connection = new Connection();
 }

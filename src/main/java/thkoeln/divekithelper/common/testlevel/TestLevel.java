@@ -164,7 +164,7 @@ public class TestLevel {
             }
 
             if( pushDates.size() <= ( currentPushDate + 1 ) ){
-                return testLevel > 0 ? testLevel : 1;
+                return testLevel;
             }
             long commitDelay;
 
@@ -181,7 +181,7 @@ public class TestLevel {
             }
         }
 
-        return testLevel > 0 ? testLevel : 1;
+        return testLevel;
     }
 
     /**
